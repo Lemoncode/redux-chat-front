@@ -1,0 +1,54 @@
+{
+  "name": "redux-chat-front",
+  "version": "1.0.0",
+  "description": "React Alicante 2018 Redux Workshop",
+  "author": "Lemoncode",
+  "license": "MIT",
+  "main": "index.js",
+  "homepage": "https://github.com/Lemoncode/redux-chat-front#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lemoncode/redux-chat-front.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lemoncode/redux-chat-front/issues"
+  },
+  "scripts": {
+    "start": "npm run start:dev",
+    "start:dev": "cross-env REST_ENV=mock webpack-dev-server --config webpack.dev.js",
+    "start:prod": "cross-env REST_ENV=real webpack-dev-server --config webpack.prod.js",
+    "build": "npm run build:dev",
+    "build:dev": "rimraf dist && cross-env REST_ENV=mock webpack --config webpack.dev.js",
+    "build:prod": "rimraf dist && cross-env REST_ENV=real webpack -p --config webpack.prod.js"
+  },
+  "devDependencies": {
+    "@types/react": "^16.4.7",
+    "@types/react-dom": "^16.0.6",
+    "@types/webpack-env": "^1.13.6",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.2.0",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "prettier": "^1.14.0",
+    "rimraf": "^2.6.2",
+    "ts-loader": "^4.4.2",
+    "tslint": "^5.11.0",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.0.1",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.16.3",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5",
+    "webpack-merge": "^4.1.3"
+  },
+  "dependencies": {
+    "@material-ui/core": "^1.4.2",
+    "@material-ui/icons": "^2.0.0",
+    "babel-polyfill": "^6.26.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules
+.DS_Store
+*.orig
+.idea/
+package-lock.json
+.awcache
+desktop.ini
+dist/
