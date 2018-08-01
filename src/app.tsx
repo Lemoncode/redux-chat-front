@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { ChatForm } from './common/components/chat-form';
+import { App } from './app.component';
 
 ReactDOM.render(
-  <ChatForm />,
+  <App />,
   document.getElementById('root')
 );
