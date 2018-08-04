@@ -1,6 +1,5 @@
 let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-let MiniCssExtractPlugin = require('mini-css-extract-plugin');
 let webpack = require('webpack');
 
 let basePath = __dirname;
@@ -11,7 +10,7 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   entry: [
-    './main.jsx',
+    './index.jsx',
   ],
   output: {
     path: path.join(basePath, 'dist'),
@@ -19,10 +18,6 @@ module.exports = {
   },
   devtool: 'source-map',
   devServer: {
-    contentBase: './dist', // Content base
-    inline: true, // Enable watch and live reload
-    host: 'localhost',
-    port: 8080,
     stats: 'errors-only'
   },  
   module: {
