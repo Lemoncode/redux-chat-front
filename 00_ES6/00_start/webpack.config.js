@@ -10,6 +10,7 @@ module.exports = {
     extensions: ['.js', '.jsx']
   },
   entry: [
+    'babel-polyfill',
     './index.jsx',
   ],
   output: {

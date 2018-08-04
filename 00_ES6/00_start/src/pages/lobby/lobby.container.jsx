@@ -1,8 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { getListOfRooms } from '../../api/rooms';
+import { LobbyComponent } from './lobby.component';
 
-export const LobbyContainer = () =>
-  <React.Fragment>
-    <h1>Hello from Lobby page</h1>
-    <Link to="/chat">Navigate to Chat</Link>
-  </React.Fragment>
+export class LobbyContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {rooms: []};
+  }
+
+  async fetchRooms() {
+    const rooms = await getListOfRooms();
+    this.setState({rooms});
+  }
+
+  render() {
+    return (
+      <LobbyComponent/>
+    );
+  }
+}
+

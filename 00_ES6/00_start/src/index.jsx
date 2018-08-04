@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 import {LobbyContainer, ChatContainer} from './pages'
+import 'babel-polyfill';
 
 ReactDOM.render(
   <HashRouter>

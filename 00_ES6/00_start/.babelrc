@@ -1,11 +1,11 @@
 {
   "presets": [
-    [
-      "env",      
-      {
-        "modules": false
-      }
-    ],
-    "react"    
+    "es2017",
+    "react",
+    "stage-0"
+  ],
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-class-properties"
   ]
 }
