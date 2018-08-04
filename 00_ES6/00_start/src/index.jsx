@@ -1,5 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HelloComponent} from './hello.jsx';
+import { HashRouter, Switch, Route } from 'react-router-dom';
+import {LobbyContainer, ChatContainer} from './pages'
 
-ReactDOM.render(<HelloComponent/>, document.getElementById('root'));
+ReactDOM.render(
+  <HashRouter>
+    <Switch>
+      <Route exact={true} path="/" component={LobbyContainer} />
+      <Route path="/chat" component={ChatContainer} />
+    </Switch>
+  </HashRouter>
+  ,
+  document.getElementById('root')
+);
