@@ -6,6 +6,8 @@ export class LobbyContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {rooms: []};
+
+    this.fetchRooms = this.fetchRooms.bind(this);
   }
 
   async fetchRooms() {
@@ -15,7 +17,7 @@ export class LobbyContainer extends React.Component {
 
   render() {
     return (
-      <LobbyComponent/>
+      <LobbyComponent rooms={this.state.rooms} fetchRooms={this.fetchRooms}/>
     );
   }
 }
