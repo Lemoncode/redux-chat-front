@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import {RoomListComponent} from './components'
+import {RoomListComponent, LobbyCommandsComponent} from './components'
 
 export class LobbyComponent extends React.Component {
   componentWillMount() {
@@ -33,12 +31,10 @@ export class LobbyComponent extends React.Component {
           rooms={this.props.rooms}
           onFieldChange={this.props.onFieldChange}
         />
-        <Typography variant="body2" gutterBottom>
-          Selected room: {this.props.selectedRoom.name}
-        </Typography>
-        <Button variant="contained" size="large" color="primary">
-          Join
-        </Button>        
+
+        <LobbyCommandsComponent
+          selectedRoom={this.props.selectedRoom}
+        />
       </div>
     )
   }
