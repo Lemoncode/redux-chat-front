@@ -8,13 +8,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 export const RoomListComponent = (props) =>
   <List>
     {props.rooms.map((room) =>
-      <ListItem button key={room.id}  onClick={(e) => props.onFieldChange('selectedRoom')(room)}>
+      <ListItem button key={room.id}  onClick={onListItemClick(props, room)}>
         <ListItemText
           primary={room.name}
         />
       </ListItem>,
     )}
   </List>
+
+const onListItemClick = (props, room) => (e) => props.onFieldChange('selectedRoom')(room);
 
 RoomListComponent.propTypes = {
   rooms: PropTypes.array.isRequired,
