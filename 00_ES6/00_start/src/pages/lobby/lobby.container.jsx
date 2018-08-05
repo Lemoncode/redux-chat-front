@@ -5,7 +5,7 @@ import { LobbyComponent } from './lobby.component';
 export class LobbyContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {rooms: [], nickname: ''};
+    this.state = {rooms: [], nickname: '', selectedRoom: {id: 0, name:''}};
 
     this.fetchRooms = this.fetchRooms.bind(this);
   }
@@ -25,7 +25,8 @@ export class LobbyContainer extends React.Component {
         rooms={this.state.rooms} 
         fetchRooms={this.fetchRooms}
         nickname={this.state.nickname}
-        nicknameChange={this.onFieldChange}
+        onFieldChange={this.onFieldChange}
+        selectedRoom={this.state.selectedRoom}
         />
     );
   }

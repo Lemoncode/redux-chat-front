@@ -6,6 +6,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 export class LobbyComponent extends React.Component {
   componentWillMount() {
@@ -13,7 +14,7 @@ export class LobbyComponent extends React.Component {
   }
 
   onChangeTextField = (fieldId) => (e) => {
-    this.props.nicknameChange(fieldId)(e.target.value);
+    this.props.onFieldChange(fieldId)(e.target.value);
   }
 
   render() {
@@ -33,7 +34,7 @@ export class LobbyComponent extends React.Component {
 
         <List>
           {this.props.rooms.map((room) =>
-            <ListItem key={room.id}>
+            <ListItem  button key={room.id} onClick={(e) => this.props.onFieldChange('selectedRoom')(room)}>
               <ListItemText
                 primary={room.name}
               />
@@ -41,13 +42,12 @@ export class LobbyComponent extends React.Component {
           )}
         </List>
 
-        <ul>
-          {
-            this.props.rooms.map(
-              (room) => <li key={room.id}>{room.name}</li>
-            )
-          }
-        </ul>
+        <Typography variant="body2" gutterBottom>
+          Selected room: {this.props.selectedRoom.name}
+        </Typography>
+        <Button variant="contained" size="large" color="primary">
+          Join
+        </Button>        
       </div>
     )
   }
@@ -56,6 +56,7 @@ export class LobbyComponent extends React.Component {
 LobbyComponent.propTypes = {
   nickname: PropTypes.string.isRequired,
   rooms: PropTypes.array.isRequired,
+  selectedRoom: PropTypes.object.isRequired,
   fetchRooms: PropTypes.func.isRequired,
-  nicknameChange : PropTypes.func.isRequired
+  onFieldChange : PropTypes.func.isRequired
 };
