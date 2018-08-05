@@ -34,6 +34,7 @@ export class LobbyComponent extends React.Component {
 
         <LobbyCommandsComponent
           selectedRoom={this.props.selectedRoom}
+          onJoinRoomRequest={this.props.onJoinRoomRequest}
         />
       </div>
     )
@@ -45,5 +46,6 @@ LobbyComponent.propTypes = {
   rooms: PropTypes.array.isRequired,
   selectedRoom: PropTypes.object.isRequired,
   fetchRooms: PropTypes.func.isRequired,
-  onFieldChange : PropTypes.func.isRequired
+  onFieldChange : PropTypes.func.isRequired,
+  onJoinRoomRequest: PropTypes.func.isRequired
 };

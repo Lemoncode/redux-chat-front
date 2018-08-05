@@ -10,12 +10,18 @@ export const LobbyCommandsComponent = (props) =>
     <Typography variant="body2" gutterBottom>
       Selected room: {props.selectedRoom.name}
     </Typography>
-    <Button variant="contained" size="large" color="primary">
+    <Button 
+      variant="contained" 
+      size="large" 
+      color="primary"
+      onClick={props.onJoinRoomRequest}
+      >
       Join
     </Button>
   </React.Fragment>
 
 LobbyCommandsComponent.propTypes = {
   selectedRoom: PropTypes.object,
+  onJoinRoomRequest: PropTypes.func,
 };
 

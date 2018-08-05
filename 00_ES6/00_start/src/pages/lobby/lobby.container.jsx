@@ -19,6 +19,12 @@ export class LobbyContainer extends React.Component {
     this.setState({[id]: value})
   }
 
+  onJoinRoomRequest = () => {
+    console.log(`*** Join Room Request 
+                 Nickname: ${this.state.nickname}
+                 Room: ${this.state.selectedRoom.name}`);
+  }
+
   render() {
     return (
       <LobbyComponent 
@@ -27,6 +33,7 @@ export class LobbyContainer extends React.Component {
         nickname={this.state.nickname}
         onFieldChange={this.onFieldChange}
         selectedRoom={this.state.selectedRoom}
+        onJoinRoomRequest={this.onJoinRoomRequest}
         />
     );
   }
