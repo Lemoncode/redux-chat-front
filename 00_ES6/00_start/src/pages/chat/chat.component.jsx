@@ -19,13 +19,31 @@ export class ChatComponent extends React.Component {
           Chat Room
         </Typography>
 
+        <div style={{height:'10rem', overflowY: 'auto'}}>
+        {
+          this.props.chatLog.map((entry) =>
+            <p key={entry.id}>{entry.message}</p> 
+          )
+        }
+        </div>
+
         <TextField
           id="currentMessage"
           label="Enter your message"
+          multiline
+          rows="4"
           value={this.props.currentMessage}
           onChange={this.onChangeTextField('currentMessage')}
           margin="normal"
         />
+        <Button 
+          variant="contained" 
+          size="large" 
+          color="primary"
+          >
+          Send
+        </Button>
+
       </div>
     )
   }
@@ -33,7 +51,7 @@ export class ChatComponent extends React.Component {
 
 ChatComponent.propTypes = {
   onFieldChange : PropTypes.func.isRequired,
-  messageHistory : PropTypes.string.isRequired,
+  chatLog : PropTypes.array.isRequired,
   currentMessage : PropTypes.string.isRequired,
-  nickName : PropTypes.string.isRequired,
+  nickname : PropTypes.string.isRequired,
 };
