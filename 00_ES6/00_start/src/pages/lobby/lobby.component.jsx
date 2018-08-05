@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import {RoomListComponent} from './components'
 
 export class LobbyComponent extends React.Component {
   componentWillMount() {
@@ -31,17 +29,10 @@ export class LobbyComponent extends React.Component {
           onChange={this.onChangeTextField('nickname')}
           margin="normal"
         />
-
-        <List>
-          {this.props.rooms.map((room) =>
-            <ListItem  button key={room.id} onClick={(e) => this.props.onFieldChange('selectedRoom')(room)}>
-              <ListItemText
-                primary={room.name}
-              />
-            </ListItem>,
-          )}
-        </List>
-
+        <RoomListComponent
+          rooms={this.props.rooms}
+          onFieldChange={this.props.onFieldChange}
+        />
         <Typography variant="body2" gutterBottom>
           Selected room: {this.props.selectedRoom.name}
         </Typography>
