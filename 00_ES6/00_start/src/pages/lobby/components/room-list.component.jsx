@@ -8,9 +8,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 export const RoomListComponent = (props) =>
   <List>
     {props.rooms.map((room) =>
-      <ListItem button key={room.id}  onClick={onListItemClick(props, room)}>
+      <ListItem button key={room}  onClick={onListItemClick(props, room)}>
         <ListItemText
-          primary={room.name}
+          primary={room}
         />
       </ListItem>,
     )}
