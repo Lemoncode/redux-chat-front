@@ -23,9 +23,6 @@ export const LobbyCommandsComponent = (props) =>
 
 const enrollFieldsInformed = (nickname, selectedRoom) =>
   (!!(nickname && selectedRoom));
-//  TODO once we have selectedRoom as object rollback to this
-//  (!!(nickname && selectedRoom && selectedRoom.name));
-
   
 LobbyCommandsComponent.propTypes = {
   nickname : PropTypes.string,
