@@ -14,6 +14,6 @@ export const ChatContainer = () =>
   <SessionContext.Consumer>
     {(sessionInfo) => <ChatContainerInner
       nickname={sessionInfo.nickname}
-      room={sessionInfo.channel}
+      room={sessionInfo.room}
     />}
   </SessionContext.Consumer>
