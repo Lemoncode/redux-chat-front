@@ -1,5 +1,6 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { SessionContext } from '../../common';
 import { getListOfRooms, canenrollRoom } from '../../api/rooms';
 import { LobbyComponent } from './lobby.component';
 
@@ -23,6 +24,8 @@ class LobbyContainerInner extends React.Component {
       console.log(`*** Join Room Request succeeded
       Nickname: ${this.state.nickname}
       Room: ${this.state.selectedRoom}`);
+
+      this.props.setChatSessionInfo(this.state.nickname, this.state.selectedRoom);
       this.props.history.push('/chat');
 
     } else {
@@ -35,7 +38,7 @@ class LobbyContainerInner extends React.Component {
   }
 
   onJoinRoomRequest = () => {
-    this.joinRoomRequest();  
+    this.joinRoomRequest();
   }
 
   render() {
@@ -52,4 +55,15 @@ class LobbyContainerInner extends React.Component {
   }
 }
 
-export const LobbyContainer = withRouter(LobbyContainerInner);
+const LobbyContainerWithSessionInner = (props) =>
+      <SessionContext.Consumer>
+       {(sessionInfo) => <LobbyContainerInner 
+                          setChatSessionInfo={sessionInfo.setChatSessionInfo}
+                          {...props}/>
+       }
+      </SessionContext.Consumer>
+    
+
+export const LobbyContainer = withRouter(
+  LobbyContainerWithSessionInner
+);
