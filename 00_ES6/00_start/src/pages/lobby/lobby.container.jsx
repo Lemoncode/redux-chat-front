@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { SessionContext } from '../../common';
+import { withSessionContext } from '../../common';
 import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
 import { LobbyComponent } from './lobby.component';
 
@@ -57,20 +57,12 @@ class LobbyContainerInner extends React.Component {
 }
 
 LobbyContainerInner.propTypes = {
+  sessionInfo : PropTypes.object,
   setChatSessionInfo : PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 
-const LobbyContainerWithSessionInner = (props) =>
-      <SessionContext.Consumer>
-       {(sessionInfo) => <LobbyContainerInner 
-                          setChatSessionInfo={sessionInfo.setChatSessionInfo}
-                          {...props}/>
-       }
-      </SessionContext.Consumer>
-    
-
-export const LobbyContainer = withRouter(
-  LobbyContainerWithSessionInner
-);
+export const LobbyContainer = withSessionContext(withRouter(
+  LobbyContainerInner
+));
 

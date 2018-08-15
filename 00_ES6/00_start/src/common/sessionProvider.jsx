@@ -4,10 +4,9 @@ export const SessionContext = React.createContext()
 
 export class SessionProvider extends React.Component {
   state = {
-     room : '',
-     nickname: '',
-     setChatSessionInfo: (nickname, room) => {
-       this.setState({nickname, room})
+    sessionInfo: {room: '', nickname: ''},
+    setChatSessionInfo: (nickname, room) => {
+       this.setState({sessionInfo: {nickname, room}})
      }
    }
 
@@ -17,3 +16,17 @@ export class SessionProvider extends React.Component {
            </SessionContext.Provider>     
    }
  }
+
+ export const withSessionContext = (Component) => (props) => (
+  <SessionContext.Consumer>
+     {
+        ({ sessionInfo, setChatSessionInfo }) => (
+           <Component
+                 {...props}
+                 sessionInfo={sessionInfo}
+                 setChatSessionInfo={setChatSessionInfo}
+           />
+        )
+     }
+ </SessionContext.Consumer>
+);
