@@ -8,20 +8,28 @@ import Button from '@material-ui/core/Button';
 export const LobbyCommandsComponent = (props) =>
   <React.Fragment>
     <Typography variant="body2" gutterBottom>
-      Selected room: {props.selectedRoom.name}
+      Selected room: {props.selectedRoom}
     </Typography>
     <Button 
       variant="contained" 
       size="large" 
       color="primary"
       onClick={props.onJoinRoomRequest}
+      disabled={!enrollFieldsInformed(props.nickname, props.selectedRoom)}
       >
       Join
     </Button>
   </React.Fragment>
 
+const enrollFieldsInformed = (nickname, selectedRoom) =>
+  (!!(nickname && selectedRoom));
+//  TODO once we have selectedRoom as object rollback to this
+//  (!!(nickname && selectedRoom && selectedRoom.name));
+
+  
 LobbyCommandsComponent.propTypes = {
-  selectedRoom: PropTypes.object,
+  nickname : PropTypes.string,
+  selectedRoom: PropTypes.string,
   onJoinRoomRequest: PropTypes.func,
 };
 
