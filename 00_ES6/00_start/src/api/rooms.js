@@ -5,7 +5,7 @@ export const getListOfRooms = () => {
             .then((response) => response.json());
 }
 
-export const canenrollRoom = (roomId, userId) => {
+export const canEnrollRoom = (roomId, userId) => {
   const url = generateCanEnrollRoomUrl(roomId);
   return fetch(url, {
       method: 'POST',

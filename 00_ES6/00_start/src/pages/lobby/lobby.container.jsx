@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { SessionContext } from '../../common';
-import { getListOfRooms, canenrollRoom } from '../../api/rooms';
+import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
 import { LobbyComponent } from './lobby.component';
 
 class LobbyContainerInner extends React.Component {
@@ -19,7 +19,7 @@ class LobbyContainerInner extends React.Component {
   }
 
   async joinRoomRequest() {
-    const canEnroll = await canenrollRoom(this.state.selectedRoom, this.state.nickname);
+    const canEnroll = await canEnrollRoom(this.state.selectedRoom, this.state.nickname);
 
     if (canEnroll) {
       console.log(`*** Join Room Request succeeded
