@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withSessionContext } from '../../common';
+import { ChatComponent} from './chat.component';
 
 export class ChatContainerInner extends React.Component {
   render() {
@@ -11,6 +12,7 @@ export class ChatContainerInner extends React.Component {
         <h1>Hello from chat page</h1>
         <p>nickname: {sessionInfo.nickname}</p>
         <p>room: {sessionInfo.room}</p>
+        <ChatComponent/>
         <Link to="/">Navigate back to lobby</Link>
       </React.Fragment>
     );
