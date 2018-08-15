@@ -1,8 +1,9 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 import { getListOfRooms } from '../../api/rooms';
 import { LobbyComponent } from './lobby.component';
 
-export class LobbyContainer extends React.Component {
+class LobbyContainerInner extends React.Component {
   constructor(props) {
     super(props);
     this.state = {rooms: [], nickname: '', selectedRoom: {id: 0, name:''}};
@@ -23,6 +24,7 @@ export class LobbyContainer extends React.Component {
     console.log(`*** Join Room Request 
                  Nickname: ${this.state.nickname}
                  Room: ${this.state.selectedRoom.name}`);
+    this.props.history.push('/chat');
   }
 
   render() {
@@ -39,3 +41,4 @@ export class LobbyContainer extends React.Component {
   }
 }
 
+export const LobbyContainer = withRouter(LobbyContainerInner);
