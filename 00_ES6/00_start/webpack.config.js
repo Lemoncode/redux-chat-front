@@ -1,11 +1,10 @@
 let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-let webpack = require('webpack');
 
 let basePath = __dirname;
 
 module.exports = {
-  context: path.join(basePath, "src"),
+  context: path.join(basePath, 'src'),
   resolve: {
     extensions: ['.js', '.jsx']
   },
