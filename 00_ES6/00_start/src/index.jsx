@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 import {SessionProvider} from './common';
 import {LobbyContainer, ChatContainer} from './pages';
-import 'babel-polyfill';
 
 ReactDOM.render(
   <SessionProvider>
