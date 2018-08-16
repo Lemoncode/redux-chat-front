@@ -11,7 +11,7 @@ export class ChatContainerInner extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {currentMessage: ''};
+    this.state = {currentMessage: '', chatLog: ''};
     this.socket = null;
   }
   
@@ -44,17 +44,22 @@ export class ChatContainerInner extends React.Component {
     socket.on('disconnect', () => console.log('disconnected'))
 
     socket.on('message', (msg) => {
+      this.setState({chatLog: `${this.state.chatLog}${msg.user}: ${msg.text}\n`});
       console.log(msg);
     });
     socket.on('messages', (msgs) => {
+      let messages = '';
       // NOTE: Timestamp it's created on server not used on client yet.
       console.log('messages', msgs);
       msgs.map((ms) => ({
         user: ms.userId,
         text: ms.text
       })).forEach((mc) => {
+        messages += `${mc.user}: ${mc.text}\n`;        
         console.log(mc);        
       });
+
+      this.setState({chatLog: `${this.state.chatLog}${messages}`});      
     });
   }
 
@@ -84,6 +89,7 @@ export class ChatContainerInner extends React.Component {
           currentMessage={this.state.currentMessage}
           onFieldChange={this.onFieldChange}
           onSendMessage={this.onSendMessage}
+          chatLog={this.state.chatLog}
         />
       </React.Fragment>
     );
@@ -92,7 +98,7 @@ export class ChatContainerInner extends React.Component {
 
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-  setChatSessionInfo: PropTypes.func.isRequired,  
+  setChatSessionInfo: PropTypes.func.isRequired,    
 };
 
 export const ChatContainer = withSessionContext(ChatContainerInner);

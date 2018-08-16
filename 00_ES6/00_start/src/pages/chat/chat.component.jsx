@@ -29,6 +29,17 @@ export class ChatComponent extends React.Component {
         <p>room: {this.props.sessionInfo.room}</p>
 
         <TextField
+          id="chatlog"
+          value={this.props.chatLog}
+          multiline={true}
+          rows={5}
+          fullWidth={true}
+          margin="normal"
+        />
+
+        <br />
+
+        <TextField
           id="currentMessage"
           label="Enter your message"
           value={this.props.currentMessage}
@@ -42,9 +53,9 @@ export class ChatComponent extends React.Component {
           onClick={this.props.onSendMessage}
           disabled={!this.props.currentMessage}
         >
-          Join
-    </Button>
-
+          Send
+        </Button>
+        <br />
         <Link to="/">Navigate back to lobby</Link>
       </div>
     )
@@ -58,4 +69,5 @@ ChatComponent.propTypes = {
   currentMessage: PropTypes.string.isRequired,
   onFieldChange: PropTypes.func.isRequired,
   onSendMessage: PropTypes.func.isRequired,
+  chatLog: PropTypes.string.isRequired,
 };
