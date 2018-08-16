@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom';
 
 export class ChatComponent extends React.Component {
   componentWillMount() {
+    this.props.enrollRoom();
+  }
+
+  componentWillUnmount() {
+    this.props.disconnectFromRoom();
   }
 
   render() {
@@ -24,4 +29,6 @@ export class ChatComponent extends React.Component {
 
 ChatComponent.propTypes = {
   sessionInfo: PropTypes.object,
+  enrollRoom: PropTypes.func,
+  disconnectFromRoom : PropTypes.func,
 };
