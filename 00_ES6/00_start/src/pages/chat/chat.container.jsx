@@ -11,6 +11,7 @@ export class ChatContainerInner extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {currentMessage: ''};
     this.socket = null;
   }
   
@@ -57,7 +58,20 @@ export class ChatContainerInner extends React.Component {
     });
   }
 
+  onFieldChange = (id) => (value) => {
+    this.setState({ [id]: value })
+  }
 
+  onSendMessage = () => {    
+    if(this.state.currentMessage) 
+    {
+      // TODO: move to member variable like, rename or refactor this
+      // maybe currified function? 
+      const msgFactory = messageFactory(this.props.sessionInfo.room, this.props.sessionInfo.nickname);
+      const message = msgFactory.compose(this.state.currentMessage)
+      this.socket.emit('message', message);  
+    }
+  }
 
   render() {
     const { sessionInfo } = this.props;
@@ -67,6 +81,9 @@ export class ChatContainerInner extends React.Component {
           sessionInfo={sessionInfo} 
           enrollRoom={this.enrollRoom}
           disconnectFromRoom={this.disconnectfromRoom}
+          currentMessage={this.state.currentMessage}
+          onFieldChange={this.onFieldChange}
+          onSendMessage={this.onSendMessage}
         />
       </React.Fragment>
     );
@@ -75,7 +92,7 @@ export class ChatContainerInner extends React.Component {
 
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-  setChatSessionInfo: PropTypes.func.isRequired,
+  setChatSessionInfo: PropTypes.func.isRequired,  
 };
 
 export const ChatContainer = withSessionContext(ChatContainerInner);
