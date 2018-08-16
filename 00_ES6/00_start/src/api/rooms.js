@@ -1,21 +1,22 @@
+import {roomsUrl, generateCanEnrollRoomUrl} from './routes';
 
 export const getListOfRooms = () => {
-  return Promise.resolve(([
-    {
-      id: 1,
-      name: 'general' 
-    },
-    {
-      id: 2,
-      name: 'design'
-    },
-    {
-      id: 3,
-      name: 'coding'
-    },
-    {
-      id: 4,
-      name: 'random'
-    },
-  ]));
-} 
+  return fetch(roomsUrl)
+            .then((response) => response.json());
+}
+
+export const canEnrollRoom = (roomId, userId) => {
+  const url = generateCanEnrollRoomUrl(roomId);
+  return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ 
+          userId 
+      }),
+      mode: 'cors',
+      headers: { 'Content-Type': 'application/json' }
+  }).then((response) => {
+      if (response.ok) {
+          return response.json();
+      }
+  });
+};
