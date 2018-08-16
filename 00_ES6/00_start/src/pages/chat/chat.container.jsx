@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { createSocket, messageFactory } from '../../api/chat'
 import { withSessionContext } from '../../common';
 import { ChatComponent } from './chat.component';
+import {messagesToString} from './chat.container.business'
 
 // Check what to do with this member variable (no rerender on update)
 
@@ -48,16 +49,7 @@ export class ChatContainerInner extends React.Component {
       console.log(msg);
     });
     socket.on('messages', (msgs) => {
-      let messages = '';
-      // NOTE: Timestamp it's created on server not used on client yet.
-      console.log('messages', msgs);
-      msgs.map((ms) => ({
-        user: ms.userId,
-        text: ms.text
-      })).forEach((mc) => {
-        messages += `${mc.user}: ${mc.text}\n`;        
-        console.log(mc);        
-      });
+      let messages = messagesToString(msgs);
 
       this.setState({chatLog: `${this.state.chatLog}${messages}`});      
     });
