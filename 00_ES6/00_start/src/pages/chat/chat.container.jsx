@@ -5,7 +5,6 @@ import { withSessionContext } from '../../common';
 import { ChatComponent } from './chat.component';
 import {establishRoomSocketConnection, messagesToString} from './chat.container.business'
 
-
 export class ChatContainerInner extends React.Component {
   
   constructor(props) {

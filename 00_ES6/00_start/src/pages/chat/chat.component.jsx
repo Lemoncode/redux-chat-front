@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import {SessionInfoComponent, SendMessageCommand} from './components';
 
 export class ChatComponent extends React.Component {
   componentWillMount() {
@@ -21,12 +20,10 @@ export class ChatComponent extends React.Component {
   render() {
     return (
       <div>
-        <Typography variant="display4" gutterBottom>
-          Chat
-        </Typography>
-        <h1>Hello from chat page</h1>
-        <p>nickname: {this.props.sessionInfo.nickname}</p>
-        <p>room: {this.props.sessionInfo.room}</p>
+        <SessionInfoComponent
+          nickname={this.props.sessionInfo.nickname}
+          room={this.props.sessionInfo.room}
+        />
 
         <TextField
           id="chatlog"
@@ -39,22 +36,12 @@ export class ChatComponent extends React.Component {
 
         <br />
 
-        <TextField
-          id="currentMessage"
-          label="Enter your message"
-          value={this.props.currentMessage}
-          onChange={this.onChangeTextField('currentMessage')}
-          margin="normal"
+        <SendMessageCommand
+          currentMessage={this.props.currentMessage}
+          onSendMessage={this.props.onSendMessage}
+          onFieldChange={this.props.onFieldChange}
         />
-        <Button
-          variant="contained"
-          size="large"
-          color="primary"
-          onClick={this.props.onSendMessage}
-          disabled={!this.props.currentMessage}
-        >
-          Send
-        </Button>
+
         <br />
         <Link to="/">Navigate back to lobby</Link>
       </div>
