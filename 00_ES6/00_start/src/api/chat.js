@@ -7,14 +7,5 @@ export const messageFactory = (channel, user) => (text) => ({
   text,
 })
 
-/*
-export const messageFactory = (channel, user) => ({
-    compose: (text) => ({
-        channel,
-        user,
-        text,  
-    }),
-});*/
-
 export const createSocket = ({url, channel, options}) => 
     ioClient(`${url}/${channel}`, options);
