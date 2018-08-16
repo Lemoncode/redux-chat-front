@@ -1,34 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createSocket, messageFactory } from '../../api/chat'
+import { messageFactory } from '../../api/chat'
 import { withSessionContext } from '../../common';
 import { ChatComponent } from './chat.component';
-import {messagesToString} from './chat.container.business'
+import {establishRoomSocketConnection, messagesToString} from './chat.container.business'
 
-// Check what to do with this member variable (no rerender on update)
 
 export class ChatContainerInner extends React.Component {
   
   constructor(props) {
     super(props);
 
-    this.state = {currentMessage: '', chatLog: ''};
+    this.state = {currentMessage: '', chatLog: ''};    
     this.socket = null;
+    this.messageFactory = null;
   }
   
   enrollRoom = () => {
-    // TODO: move this to env variable
-    const baseUrl = 'http://localhost:3000';
-
-    const socketParams = {
-      url: baseUrl,
-      channel: this.props.sessionInfo.room,
-      options: {
-        query: `user=${this.props.sessionInfo.nickname}`
-      },
-    };
-
-    this.socket = createSocket(socketParams);
+    this.socket = establishRoomSocketConnection(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
+    this.messageFactory = messageFactory(this.props.sessionInfo.room, this.props.sessionInfo.nickname);
     this.setupSocketListeners(this.socket);
   }
 
@@ -60,13 +50,9 @@ export class ChatContainerInner extends React.Component {
   }
 
   onSendMessage = () => {    
-    if(this.state.currentMessage) 
-    {
-      // TODO: move to member variable like, rename or refactor this
-      // maybe currified function? 
-      const msgFactory = messageFactory(this.props.sessionInfo.room, this.props.sessionInfo.nickname);
-      const message = msgFactory.compose(this.state.currentMessage)
-      this.socket.emit('message', message);  
+    if(this.state.currentMessage && this.messageFactory) {
+        const message = this.messageFactory(this.state.currentMessage)
+        this.socket.emit('message', message);    
     }
   }
 
