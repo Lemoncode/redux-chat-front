@@ -9,11 +9,7 @@ export class ChatContainerInner extends React.Component {
     const { sessionInfo } = this.props;
     return (
       <React.Fragment>
-        <h1>Hello from chat page</h1>
-        <p>nickname: {sessionInfo.nickname}</p>
-        <p>room: {sessionInfo.room}</p>
-        <ChatComponent/>
-        <Link to="/">Navigate back to lobby</Link>
+        <ChatComponent sessionInfo={sessionInfo}/>        
       </React.Fragment>
     );
   }
