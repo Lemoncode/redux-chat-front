@@ -1,12 +1,14 @@
 # Basic ES6 Concepts
 
-# Arrow functions
+## Arrow functions
 
 Let's check [MDN definition](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions): An arrow function expression has a shorter syntax than a function expression and does not have its own this, arguments, super, or new.target. These function expressions are best suited for non-method functions, and they cannot be used as constructors.
 
 Where do we use arrow functions (aka fat arrow):
   - When we invoke a function as a callback and we don't want to loose our reference to 'this'.
   - When we want a shorter way to define a function.
+
+### Real usage
 
 Let's compare sintax writing a function
 
@@ -30,7 +32,7 @@ const result = sum(a,b);
 console.log(result);
 ```
 
-Where are the return statement and curly braces? That's another shorthand but can become tricky:
+Where have gone the return statement and curly braces? That's another shorthand but can become tricky:
 
 - If we have several lines of code we have to use return.
 
@@ -73,10 +75,34 @@ const createEmptyClient() => {
 }
 ```
 
-Real usage:
-
-- When we want to create a function that will be consumen by a given event and we want to avoid loosing 'this'
+- When we want to create a function that will be consumed by a given event and we want to avoid loosing 'this'
 on a component class when you want to keep _this_ (yes, using fat arrow on a class method, thanks to Babel).
+
+_Old school code:_
+
+```javascript
+class MyPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { nickname: ''};
+
+    this.onNickNameChange = this.onNickNameChange.bind(this);
+  }
+
+  onNickNameChange(e) {
+    this.setState({ nickname: e.target.value })
+  }
+
+
+  render() {
+    return (
+  		<input value={this.state.nickname} onChange={this.props.onNickNameChange}/>    
+		);
+  }
+}
+``` 
+
+_Using fat arrow:_
 
 ```javascript
 class MyPage extends React.Component {
@@ -98,44 +124,12 @@ class MyPage extends React.Component {
 }
 ``` 
 
-This work in the same way as using _bind_
+This works in the same way as using _bind_.
 
-Old school code:
-
-```javascript
-class MyPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { nickname: ''};
-
-    this.onNickNameChange = this.onNickNameChange.bind(this);
-  }
-
-  onNickNameChange(e) => {
-    this.setState({ nickname: e.target.value })
-  }
-
-
-  render() {
-    return (
-  		<input value={this.state.nickname} onChange={this.props.onNickNameChange}/>    
-		);
-  }
-}
-``` 
 
 - On Redux, when you create action creators to write less code.
 
-This 'cool code'
-
-```javascript
-const fetchMembersCompleted = (members: MemberEntity[]) => ({
-  type: actionTypes.FETCH_MEMBERS_COMPLETED,
-  payload: members,
-});
-```
-
-Is equivalent to old school version:
+Old school version:
 
 ```javascript
 function fetchMembersCompleted(members: MemberEntity[]) {
@@ -147,17 +141,18 @@ function fetchMembersCompleted(members: MemberEntity[]) {
 ```
 
 
-- On Redux, when you use mapDispatchToProps to write less code.
-
-This 'cool code'
+Using fat arrow
 
 ```javascript
-const mapDispatchToProps = (dispatch) => ({
-  fetchMembers: () => dispatch(fetchMembersAction()),
+const fetchMembersCompleted = (members: MemberEntity[]) => ({
+  type: actionTypes.FETCH_MEMBERS_COMPLETED,
+  payload: members,
 });
 ```
 
-Is equivalent to this verbose implementation (prone to errors):
+- On Redux, when you use mapDispatchToProps to write less code.
+
+Old school, verbose implementation (prone to errors):
 
 ```javascript
 const mapDispatchToProps = (dispatch) => {
@@ -169,13 +164,22 @@ const mapDispatchToProps = (dispatch) => {
 });
 ```
 
-# Object Literal Propery Value Shorthand
+Using fat arrow:
+
+```javascript
+const mapDispatchToProps = (dispatch) => ({
+  fetchMembers: () => dispatch(fetchMembersAction()),
+});
+```
+
+
+## Object Literal Property Value Shorthand
 
 When we construct an object we use to assign key-value pairs, but if the name
 of the property to assign corresponds with the name of the variable that holds the value
 we can take a short hand.
 
-## Example
+### Example
 
 ES5 style:
 
@@ -211,7 +215,7 @@ const clientEntity = {
 }
 ```
 
-## Real usage
+### Real usage
 
 Why is this used? You write less code, avoid introducing typos when typing prop / value, better readiblity.
 
@@ -232,12 +236,12 @@ const updateClient(client) {
 }
 ```
 
-# map
+## map
 
 Some times we need to iterate over an array of values and return a new array with exactly the same amount of items and
 some transformations applied.
 
-## Example
+### Example
 
 A dummy sample, apply a discount to every item in a given array.
 
@@ -273,7 +277,7 @@ Maps loops over each item, applies a funcion to each item and returns a new arra
 array does not change, we say map is an immutable method the input params do not change and a new array is created with the new
 results)
 
-## Real usage
+### Real usage
 
 A common usage in React is to transform a set of data in components, for example:
 - You get an array containing one shopping item per entry and you want to display
@@ -338,15 +342,15 @@ Full sample can be found: https://stackblitz.com/edit/react-k7kksh
 Things to take into consideration, _key_, each react component that we create inside the map statements needs an unique key
 (more info: https://stackoverflow.com/questions/28329382/understanding-unique-keys-for-array-children-in-react-js).
 
-# Destructuring
+## Destructuring
 
 Destructuring on object lets you bind variables to different properties of an object (you can apply destrucring on arrays as well, but we will focus on objects).
 
-## Example
+### Example
 
 How this works
 
-_Using the old way_
+_Using the ES5 way_
 
 ```
 const clientA = {
@@ -388,7 +392,7 @@ of this object, you can use destructuring, the next developer that will read you
 code can quickly check which properties of _Window_ are being used without 
 having to traverse through all the functin code.
 
-## Real usage
+### Real usage
 
 A common usage in react is to apply destructuring on render props, instead
 of placing everywhere _this.props._ (class component) or _props._ (stateless)
@@ -405,29 +409,70 @@ Class components
 
 _old way_
 
+```javascript
+export class MyComponent extends React.Component {
+
+  render() {
+    return (
+      <h1>Hello {this.props.name} {this.props.lastname}!</h1>
+    )
+  }
+}
+```
+
 _using destructuring_
+
+```javascript
+export class MyComponent extends React.Component {
+
+  render() {
+    const {name, lastname} = this.props;
+    return (
+      <h1>Hello {props.name} {props.lastname}!</h1>
+    )
+  }
+}
+```
 
 Stateless components:
 
 _old way_
 
-Stackblitz:
+```javascript
+export const = MyComponent(props) =>
+  <h1>Hello {props.name} {props.lastname}!</h1>
+}
+```
 
 _using destructuring_
 
-Stackblitz:
+```javascript
+export const = MyComponent(props) =>
+  <h1>Hello {props.name} {props.lastname}!</h1>
+}
+```
 
 Another sample of real usage applies when using import, when you just want
 to import a function or entry of a given module you can apply destructuring_
 
 _old way_
 
+```javascript
+import React from 'react';
+
+class App extends React.Component {
+```
+
+
 _using destructuring_
 
-By using this approach you avoid introducing typos when replicating name of
-modules or functions.
+```javascript
+import React, { Component } from 'react';
 
-# Spread operator
+class App extends Component {
+```
+
+## Spread operator
 
 What MDN says about spread operator: Spread syntax allows an iterable such as an array expression or string to be expanded in places where zero or more arguments (for function calls) or elements (for array literals) are expected, or an object expression to be expanded in places where zero or more key-value pairs (for object literals) are expected.
 
@@ -557,25 +602,76 @@ const createNewClient(country) {
   }  
 }
 ```
-## Real usage
+### Real usage
 
 You will see this a lot in reducers:
 
-** Sample
+```javascript
+const myReducer = (state, action) => {
+  switch (action.type) {
+    case actionsEnums.UPDATE_NICKNAME:
+      return {
+        ...state,
+        nickname: action.payload
+      }
+    default:
+  }
+  return state;
+};
+```
 
 Another interesting usage of spread operator is assigning props from a parent component to a child component.
 
-Let's say we have a parent component with 5 properties, and we want to pass down that five properties to a child component.
+Let's say we have a parent component with Z properties, and we want to pass down that exact five properties to a child component.
 
 We could go the tedious way:
 
+```javascript
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <HelloContainer name="John" lastname="Doe" />
+      </div>
+    );
+  }
+}
+
+const HelloContainer = (props) =>
+  <HelloComponent name={props.name} lastname={props.lastname}/>
+
+const HelloComponent = (props) => 
+  <h1>Hello {props.name} {props.lastname} !</h1>
+```
+
 Or we could use spread operator:
+
+```javascript
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <HelloContainer name="John" lastname="Doe" />
+      </div>
+    );
+  }
+}
+
+const HelloContainer = (props) =>
+  <HelloComponent {...props}/>
+
+const HelloComponent = (props) => 
+  <h1>Hello {props.name} {props.lastname} !</h1>
+```
+
+Sample: https://stackblitz.com/edit/react-dgxyx5
 
 > Remark, this can be dangerous because you end up passing props that maybe could not match (no control over that), this
 is used whenever you create an Hoc.
 
+> Note down you will see this a lot in action when implement High order components.
 
-# Currying
+## Currying
 
 There is a way to reduce functions of more than one argument to functions of one argument, a way called currying after Haskell B. Curry.
 
@@ -583,19 +679,177 @@ Currying is a process to reduce functions of more than one argument to functions
 
 Let's see a dumb sample, compare a normal sum function and convert it to a currified function:
 
-Ok, so now we can create things like...
+### Sample
+
+A normal sum two number functions
+
+```javascript
+const sum = (a, b) => a + b;
+
+console.log(sum(3,2)); // 5
+```
+
+Let's currify this function
+
+```javascript
+const sum = (a) =>  (b) => a + b;
+
+console.log(sum(3,2)); // Function, does not invoke a + b
+console.log(sum(3)(2)); // 5
+
+const incrementByTwo(2);
+
+incrementByTwo(3); // 5
+incrementByTwo(6); // 8
+```
+
+
+### Real Usage
 
 This doesn't look quite useful, but on real scenarios it starts to make sense.
 
 Let's think about a color picker, where we have red, green and blue components, and let's say we want to handle and assign this value,
 in a non currified way we could do something like:
 
-*** Three handlers
+```javascript
+class ColorPicker extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+      red: 10,
+      green: 80,
+      blue: 20
+    };
+  }
+
+  onChangeRed = (event) => {
+    this.setState({red: event.target.value})
+  }
+
+  onChangeGreen = (event) => {
+    this.setState({green: event.target.value})
+  }
+
+  onChangeBlue = (event) => {
+    this.setState({blue: event.target.value})
+  }
+
+
+  render() {
+    const divStyle = {
+      width: '11rem',
+      height: '7rem',
+      backgroundColor: `rgb(${this.state.red},${this.state.green}, ${this.state.blue})`
+    };    
+    
+    const {red,green,blue} = this.state;
+
+    return(
+      <div>
+          <div style={divStyle}>
+          </div>            
+          <div>
+            <input type="range"
+              min="0"
+              max="255"
+              value={red}
+              onChange={this.onChangeRed}
+            />
+            {red}      
+          </div>
+          <div>
+            <input type="range"
+              min="0"
+              max="255"
+              value={green}
+              onChange={this.onChangeGreen}
+            />
+            {green}
+          </div>
+          <div>        
+            <input type="range"
+              min="0"
+              max="255"
+              value={blue}
+              onChange={this.onChangeBlue}
+            />
+            {blue}      
+          </div>
+      </div>
+    );
+  }
+} 
+```
+Demo: https://stackblitz.com/edit/react-aevzed
 
 But we have three callbacks that are doing near the same thing, wouldn't it be nice to pass the name of the colorpicker component?
 BUUUT the input handler has it's own params and we cannot change them, we could just currify this: create a function where you inform
 the color key name, and return another function that contains the standar event signature, this code could just remain like:
 
-*** New code
+```javascript
+class ColorPicker extends Component {
+
+  constructor() {
+    super();
+    this.state = {
+      red: 10,
+      green: 80,
+      blue: 20
+    };
+  }
+
+  // curry
+  onChangeColor = (colorId) => (event) => {
+    this.setState({[colorId]: event.target.value})
+  }
+
+  
+  render() {
+    const divStyle = {
+      width: '11rem',
+      height: '7rem',
+      backgroundColor: `rgb(${this.state.red},${this.state.green}, ${this.state.blue})`
+    };    
+    
+    const {red,green,blue} = this.state;
+
+    return(
+      <div>
+          <div style={divStyle}>
+          </div>            
+          <div>
+            <input type="range"
+              min="0"
+              max="255"
+              value={red}
+              onChange={this.onChangeColor('red')}
+            />
+            {red}      
+          </div>
+          <div>
+            <input type="range"
+              min="0"
+              max="255"
+              value={green}
+              onChange={this.onChangeColor('green')}
+            />
+            {green}
+          </div>
+          <div>        
+            <input type="range"
+              min="0"
+              max="255"
+              value={blue}
+              onChange={this.onChangeColor('blue')}
+            />
+            {blue}      
+          </div>
+      </div>
+    );
+  }
+} 
+```
+
+Demo: https://stackblitz.com/edit/react-lc7ytj?file=index.js 
 
