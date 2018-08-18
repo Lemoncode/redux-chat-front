@@ -2,6 +2,173 @@
 
 # Arrow functions
 
+Let's check [MDN definition](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions): An arrow function expression has a shorter syntax than a function expression and does not have its own this, arguments, super, or new.target. These function expressions are best suited for non-method functions, and they cannot be used as constructors.
+
+Where do we use arrow functions (aka fat arrow):
+  - When we invoke a function as a callback and we don't want to loose our reference to 'this'.
+  - When we want a shorter way to define a function.
+
+Let's compare sintax writing a function
+
+_ES5 style:_
+
+```javascript
+function sum(a, b) {
+  return a + b;
+}
+
+const result = sum(a,b);
+console.log(result);
+```
+
+_Using arrow functions_
+
+```javascript
+const sum = (a, b) => a + b;
+
+const result = sum(a,b);
+console.log(result);
+```
+
+Where are the return statement and curly braces? That's another shorthand but can become tricky:
+
+- If we have several lines of code we have to use return.
+
+```javascript
+const displaySomeLines = (a, b) => {
+  console.log('Hello from line one');
+  const result = a + b;
+  console.log(result);
+
+  return result;
+}
+```
+
+- If we just want to return something we don't need to use return.
+
+```javascript
+// Same as return a+b
+const sum = (a, b) => a + b;
+```
+
+- BUT if we are in the previous case but we want to return an object we MUST enclose it in parenthesis (to let )
+
+```javascript
+const createEmptyClient() => ({
+  id: 1,
+  name: 'John',
+  lastname: 'Doe',
+})
+```
+
+The code above does exactly the same as:
+
+```javascript
+const createEmptyClient() => {
+  return {
+    id: 1,
+    name: 'John',
+    lastname: 'Doe',
+  }
+}
+```
+
+Real usage:
+
+- When we want to create a function that will be consumen by a given event and we want to avoid loosing 'this'
+on a component class when you want to keep _this_ (yes, using fat arrow on a class method, thanks to Babel).
+
+```javascript
+class MyPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { nickname: ''};
+  }
+
+  onNickNameChange = (e) => {
+    this.setState({ nickname: e.target.value })
+  }
+
+
+  render() {
+    return (
+		  <input value={this.state.nickname} onChange={this.props.onNickNameChange}/>    
+		);
+  }
+}
+``` 
+
+This work in the same way as using _bind_
+
+Old school code:
+
+```javascript
+class MyPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { nickname: ''};
+
+    this.onNickNameChange = this.onNickNameChange.bind(this);
+  }
+
+  onNickNameChange(e) => {
+    this.setState({ nickname: e.target.value })
+  }
+
+
+  render() {
+    return (
+  		<input value={this.state.nickname} onChange={this.props.onNickNameChange}/>    
+		);
+  }
+}
+``` 
+
+- On Redux, when you create action creators to write less code.
+
+This 'cool code'
+
+```javascript
+const fetchMembersCompleted = (members: MemberEntity[]) => ({
+  type: actionTypes.FETCH_MEMBERS_COMPLETED,
+  payload: members,
+});
+```
+
+Is equivalent to old school version:
+
+```javascript
+function fetchMembersCompleted(members: MemberEntity[]) {
+  return {
+    type: actionTypes.FETCH_MEMBERS_COMPLETED,
+    payload: members,
+  };
+}
+```
+
+
+- On Redux, when you use mapDispatchToProps to write less code.
+
+This 'cool code'
+
+```javascript
+const mapDispatchToProps = (dispatch) => ({
+  fetchMembers: () => dispatch(fetchMembersAction()),
+});
+```
+
+Is equivalent to this verbose implementation (prone to errors):
+
+```javascript
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchMembers: () => {
+      dispatch(fetchMembersAction()),
+    }
+  }  
+});
+```
+
 # Object Literal Propery Value Shorthand
 
 When we construct an object we use to assign key-value pairs, but if the name
@@ -115,10 +282,61 @@ it in a grid.
 
 Let's check how to transform a list including movies data into components.
 
+```javascript
+import React, { Component } from 'react';
+import { render } from 'react-dom';
 
-Full sample can be found:
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      name: 'React',
+      movies: [
+        {
+          id: 1,
+          poster: 'https://m.media-amazon.com/images/M/MV5BNzVlY2MwMjktM2E4OS00Y2Y3LWE3ZjctYzhkZGM3YzA1ZWM2XkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UX182_CR0,0,182,268_AL_.jpg',          
+          name: 'Star Wars'
+        },
+        {
+          id: 2,
+          poster: 'https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UX182_CR0,0,182,268_AL_.jpg',
+          name: 'Interstellar'
+        },
+        {
+          id: 3,
+          poster: 'https://m.media-amazon.com/images/M/MV5BMmNlYzRiNDctZWNhMi00MzI4LThkZTctMTUzMmZkMmFmNThmXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UX182_CR0,0,182,268_AL_.jpg',          
+          name: '2001: A Space Odyssey'
+        },
+        
+      ]
+    };
+  }
 
-Things to take into consideration, _key_ 
+  render() {
+    return (
+      <div>
+        {
+          this.state.movies.map(
+            (movie) => 
+              <div key={movie.id}>
+                <img src={movie.poster}/>
+                <h5>{movie.name}</h5>
+              </div>
+          )
+        }
+        
+      </div>
+    );
+  }
+}
+
+render(<App />, document.getElementById('root'));
+```
+
+Full sample can be found: https://stackblitz.com/edit/react-k7kksh
+
+Things to take into consideration, _key_, each react component that we create inside the map statements needs an unique key
+(more info: https://stackoverflow.com/questions/28329382/understanding-unique-keys-for-array-children-in-react-js).
 
 # Destructuring
 
