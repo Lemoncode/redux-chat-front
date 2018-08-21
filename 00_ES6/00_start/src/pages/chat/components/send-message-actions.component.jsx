@@ -41,6 +41,7 @@ const SendMessageActionsInner = (props) =>
       placeholder="Enter your message"
       value={props.currentMessage}
       onChange={onChangeTextField('currentMessage', props.onFieldChange)}
+      onKeyPress={handleInputKeyPress(props.currentMessage, props.onSendMessage)}
       margin="normal"
     />
     <Button
@@ -56,6 +57,12 @@ const SendMessageActionsInner = (props) =>
 
 const onChangeTextField = (fieldId, onFieldChange) => (e) => {
   onFieldChange(fieldId)(e.target.value);
+}
+
+const handleInputKeyPress = (message, callback) => (event) => {
+  if (message && event && event.key === 'Enter') {
+    callback();
+  }
 }
 
 SendMessageActionsInner.propTypes = {

@@ -3,17 +3,20 @@ import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import { SessionInfoComponent, SendMessageActions, ChatHeaderComponent } from './components';
+import { SendMessageActions, ChatHeaderComponent, ChatLogComponent } from './components';
 import { CardLayout } from '../../common';
 
 const styles = (theme) => ({
   card: {
+    display: 'flex',
+    flexDirection: 'column',
     width: '100%',
+    height: '100%',
   },
   cardContent: {
-    marginTop: '1rem',
+    flex: 1,
+    overflowX: 'auto',
   },
   cardActions: {
     padding: '1rem 1.5rem',
@@ -44,14 +47,11 @@ class ChatComponentInner extends React.Component {
             room={this.props.sessionInfo.room}
           />
           <CardContent className={this.props.classes.cardContent}>
-            <TextField
-              id="chatlog"
-              value={this.props.chatLog}
-              multiline={true}
-              rows={5}
-              fullWidth={true}
-              margin="normal"
+            <ChatLogComponent 
+              nickname={this.props.sessionInfo.nickname}
+              chatLog={this.props.chatLog}
             />
+            {/* {this.props.chatLog.map((msg, i) => <p key={i}>{`${msg.user}: ${msg.text}`}</p>)} */}
           </CardContent>
           <CardActions className={this.props.classes.cardActions}>
             <SendMessageActions
@@ -73,7 +73,7 @@ ChatComponentInner.propTypes = {
   currentMessage: PropTypes.string.isRequired,
   onFieldChange: PropTypes.func.isRequired,
   onSendMessage: PropTypes.func.isRequired,
-  chatLog: PropTypes.string.isRequired,
+  chatLog: PropTypes.array.isRequired,
 };
 
 export const ChatComponent = withStyles(styles)(ChatComponentInner)

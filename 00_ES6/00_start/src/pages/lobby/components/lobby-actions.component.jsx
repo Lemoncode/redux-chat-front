@@ -14,6 +14,7 @@ const styles = (theme) => ({
   }
 });
 
+
 const LobbyActionsComponentInner = (props) =>
   <React.Fragment>
     <TextField
@@ -22,6 +23,8 @@ const LobbyActionsComponentInner = (props) =>
       label="Enter your nickname"
       value={props.nickname}
       onChange={props.onNicknameChange}
+      onKeyPress={handleInputKeyPress(props.nickname, props.selectedRoom,
+        props.onJoinRoomRequest)}
       margin="dense"
     />
     <Button
@@ -38,7 +41,14 @@ const LobbyActionsComponentInner = (props) =>
 
 const enrollFieldsInformed = (nickname, selectedRoom) =>
   (!!(nickname && selectedRoom));
-  
+
+const handleInputKeyPress = (nickname, selectedRoom, callback) => (event) => {
+  const enrollOk = enrollFieldsInformed(nickname, selectedRoom);
+  if (enrollOk && event && event.key === 'Enter') {
+    callback();
+  }
+} 
+
 LobbyActionsComponentInner.propTypes = {
   nickname : PropTypes.string.isRequired,
   selectedRoom: PropTypes.string.isRequired,
