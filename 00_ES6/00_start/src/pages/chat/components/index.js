@@ -1,2 +1,2 @@
-export * from './send-message-command.component';
-export * from './session-info.component'
+export * from './chat-header.component';
+export * from './send-message-actions.component';

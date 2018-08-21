@@ -22,7 +22,7 @@ const styles = (theme) => ({
 });
 
 
-export class LobbyComponentInner extends React.Component {
+class LobbyComponentInner extends React.Component {
   componentWillMount() {
     this.props.fetchRooms();
   }

@@ -1,10 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import TextField from '@material-ui/core/TextField';
-import {SessionInfoComponent, SendMessageCommand} from './components';
+import { withStyles } from '@material-ui/core/styles';
+import { SessionInfoComponent, SendMessageActions, ChatHeaderComponent } from './components';
+import { CardLayout } from '../../common';
 
-export class ChatComponent extends React.Component {
+const styles = (theme) => ({
+  card: {
+    width: '100%',
+  },
+  cardContent: {
+    marginTop: '1rem',
+  },
+  cardActions: {
+    padding: '1rem 1.5rem',
+    backgroundColor: `${theme.palette.primary.light}4a`,
+  }
+});
+
+
+class ChatComponentInner extends React.Component {
   componentWillMount() {
     this.props.enrollRoom();
   }
@@ -19,37 +37,36 @@ export class ChatComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <SessionInfoComponent
-          nickname={this.props.sessionInfo.nickname}
-          room={this.props.sessionInfo.room}
-        />
-
-        <TextField
-          id="chatlog"
-          value={this.props.chatLog}
-          multiline={true}
-          rows={5}
-          fullWidth={true}
-          margin="normal"
-        />
-
-        <br />
-
-        <SendMessageCommand
-          currentMessage={this.props.currentMessage}
-          onSendMessage={this.props.onSendMessage}
-          onFieldChange={this.props.onFieldChange}
-        />
-
-        <br />
-        <Link to="/">Navigate back to lobby</Link>
-      </div>
+      <CardLayout>
+        <Card className={this.props.classes.card}>
+          <ChatHeaderComponent
+            nickname={this.props.sessionInfo.nickname}
+            room={this.props.sessionInfo.room}
+          />
+          <CardContent className={this.props.classes.cardContent}>
+            <TextField
+              id="chatlog"
+              value={this.props.chatLog}
+              multiline={true}
+              rows={5}
+              fullWidth={true}
+              margin="normal"
+            />
+          </CardContent>
+          <CardActions className={this.props.classes.cardActions}>
+            <SendMessageActions
+              currentMessage={this.props.currentMessage}
+              onSendMessage={this.props.onSendMessage}
+              onFieldChange={this.props.onFieldChange}
+            />
+          </CardActions>
+        </Card>
+      </CardLayout>
     )
   }
 }
 
-ChatComponent.propTypes = {
+ChatComponentInner.propTypes = {
   sessionInfo: PropTypes.object.isRequired,
   enrollRoom: PropTypes.func.isRequired,
   disconnectFromRoom: PropTypes.func.isRequired,
@@ -58,3 +75,5 @@ ChatComponent.propTypes = {
   onSendMessage: PropTypes.func.isRequired,
   chatLog: PropTypes.string.isRequired,
 };
+
+export const ChatComponent = withStyles(styles)(ChatComponentInner)

@@ -39,7 +39,7 @@ const LobbyActionsComponentInner = (props) =>
 const enrollFieldsInformed = (nickname, selectedRoom) =>
   (!!(nickname && selectedRoom));
   
-  LobbyActionsComponentInner.propTypes = {
+LobbyActionsComponentInner.propTypes = {
   nickname : PropTypes.string.isRequired,
   selectedRoom: PropTypes.string.isRequired,
   onNicknameChange: PropTypes.func.isRequired,

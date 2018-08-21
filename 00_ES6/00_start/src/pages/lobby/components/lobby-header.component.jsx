@@ -4,19 +4,15 @@ import HomeIcon from '@material-ui/icons/Home';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({
-  container: {
-
-  },
-  cardTitle: {
+  title: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     padding: '0 1rem 0.25rem',
-    textAlign: 'end',
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
   },
-  cardTitleIcon: {
+  icon: {
     width: '3rem',
     height: '3rem',
     marginRight: '0.5rem',
@@ -26,10 +22,10 @@ const styles = (theme) => ({
 const LobbyHeaderComponentInner = (props) =>
   <div className={props.classes.container}>
     <Typography
-      className={props.classes.cardTitle}
+      className={props.classes.title}
       variant="display3"
     >
-      <HomeIcon className={props.classes.cardTitleIcon}/>
+      <HomeIcon className={props.classes.icon}/>
       Lobby
     </Typography>
   </div>
