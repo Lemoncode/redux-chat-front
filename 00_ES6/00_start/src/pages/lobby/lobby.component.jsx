@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import {RoomListComponent, LobbyCommandsComponent} from './components'
+import { RoomListComponent, LobbyCommandsComponent } from './components';
 
 export class LobbyComponent extends React.Component {
   componentWillMount() {
