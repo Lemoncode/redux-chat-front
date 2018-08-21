@@ -31,7 +31,7 @@ const styles = (theme) => ({
 
 const ChatLogComponentInner = (props) => {
   const getMessageStyle = (username) =>
-    `${props.classes.messageContainer} ${/*props.nickname*/'Chiquito' === username ?
+    `${props.classes.messageContainer} ${props.nickname === username ?
       props.classes.highlight : undefined}`
 
   return (
