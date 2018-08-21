@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Switch, Route } from 'react-router-dom';
-import {SessionProvider} from './common';
-import {LobbyContainer, ChatContainer} from './pages';
+import { HashRouter, Route, Switch } from 'react-router-dom';
+import { SessionProvider } from './common';
+import { ChatContainer, LobbyContainer } from './pages';
 
 ReactDOM.render(
   <SessionProvider>
