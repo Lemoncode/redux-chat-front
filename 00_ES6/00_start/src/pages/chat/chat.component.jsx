@@ -4,7 +4,12 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import { withStyles } from '@material-ui/core/styles';
-import { SendMessageActions, ChatHeaderComponent, ChatLogComponent } from './components';
+import {
+  SendMessageActions,
+  ChatHeaderComponent,
+  ChatLogComponent,
+  ChatAutoscrollComponent
+} from './components';
 import { CardLayout } from '../../common';
 import styles from './chat.styles';
 
@@ -30,7 +35,10 @@ class ChatComponentInner extends React.Component {
             nickname={this.props.sessionInfo.nickname}
             room={this.props.sessionInfo.room}
           />
-          <CardContent className={this.props.classes.cardContent}>
+          <CardContent
+            component={ChatAutoscrollComponent}
+            className={this.props.classes.cardContent}
+          >
             <ChatLogComponent 
               nickname={this.props.sessionInfo.nickname}
               chatLog={this.props.chatLog}
