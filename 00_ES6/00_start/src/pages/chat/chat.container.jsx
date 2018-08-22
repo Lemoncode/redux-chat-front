@@ -3,14 +3,21 @@ import PropTypes from 'prop-types';
 import { messageFactory } from '../../api/chat'
 import { withSessionContext } from '../../common';
 import { ChatComponent } from './chat.component';
-import {establishRoomSocketConnection, messagesToString} from './chat.container.business'
+import {
+  establishRoomSocketConnection,
+  mapApiSingleMessageToViewmodel,
+  mapApiMessagesToViewmodel
+} from './chat.container.business'
 
 export class ChatContainerInner extends React.Component {
   
   constructor(props) {
     super(props);
 
-    this.state = {currentMessage: '', chatLog: ''};    
+    this.state = {
+      currentMessage: '',
+      chatLog: [],
+    };    
     this.socket = null;
     this.messageFactory = null;
   }
@@ -34,13 +41,16 @@ export class ChatContainerInner extends React.Component {
     socket.on('disconnect', () => console.log('disconnected'))
 
     socket.on('message', (msg) => {
-      this.setState({chatLog: `${this.state.chatLog}${msg.user}: ${msg.text}\n`});
       console.log(msg);
+      this.setState({
+        chatLog: [...this.state.chatLog, mapApiSingleMessageToViewmodel(msg)],
+      });
     });
     socket.on('messages', (msgs) => {
-      let messages = messagesToString(msgs);
-
-      this.setState({chatLog: `${this.state.chatLog}${messages}`});      
+      const mappedMessages = mapApiMessagesToViewmodel(msgs);
+      this.setState({
+        chatLog: this.state.chatLog.concat(mappedMessages),
+      });
     });
   }
 
@@ -50,8 +60,9 @@ export class ChatContainerInner extends React.Component {
 
   onSendMessage = () => {    
     if(this.state.currentMessage && this.messageFactory) {
-        const message = this.messageFactory(this.state.currentMessage)
-        this.socket.emit('message', message);    
+      const message = this.messageFactory(this.state.currentMessage)
+      this.socket.emit('message', message); 
+      this.setState({currentMessage: ''});
     }
   }
 
