@@ -20,6 +20,7 @@ const SendMessageActionsInner = (props) =>
       onChange={onChangeTextField('currentMessage', props.onFieldChange)}
       onKeyPress={handleInputKeyPress(props.currentMessage, props.onSendMessage)}
       margin="normal"
+      autoFocus
     />
     <Button
       className={props.classes.sendButton}
