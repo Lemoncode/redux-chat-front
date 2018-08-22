@@ -1,6 +1,6 @@
 const defaultState = () => ({
   nickname: '',
-  channel: '',
+  room: '',
 });
 
 export const sessionInfoReducer = (state = defaultState(), action) => {
