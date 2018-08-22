@@ -6,12 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import { Avatar } from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
-
-const styles = (theme) => ({
-  selectedAvatar: {
-    backgroundColor: theme.palette.secondary.main,
-  },
-});
+import styles from './room-list.styles';
 
 
 const RoomListComponentInner = (props) =>

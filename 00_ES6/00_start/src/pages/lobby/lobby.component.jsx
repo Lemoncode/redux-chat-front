@@ -7,19 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { LobbyHeaderComponent, RoomListComponent, LobbyActionsComponent } from './components';
-
-const styles = (theme) => ({
-  card: {
-    width: '75%',
-    minWidth: '30rem',
-  },
-  cardContent: {
-    marginTop: '1rem',
-  },
-  cardActions: {
-    padding: '1rem 1.5rem',
-  }
-});
+import styles from './lobby.styles';
 
 
 class LobbyComponentInner extends React.Component {

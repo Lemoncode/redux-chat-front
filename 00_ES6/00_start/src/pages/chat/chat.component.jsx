@@ -6,23 +6,7 @@ import CardActions from '@material-ui/core/CardActions';
 import { withStyles } from '@material-ui/core/styles';
 import { SendMessageActions, ChatHeaderComponent, ChatLogComponent } from './components';
 import { CardLayout } from '../../common';
-
-const styles = (theme) => ({
-  card: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    height: '100%',
-  },
-  cardContent: {
-    flex: 1,
-    overflowX: 'auto',
-  },
-  cardActions: {
-    padding: '1rem 1.5rem',
-    backgroundColor: `${theme.palette.primary.light}4a`,
-  }
-});
+import styles from './chat.styles';
 
 
 class ChatComponentInner extends React.Component {
@@ -51,7 +35,6 @@ class ChatComponentInner extends React.Component {
               nickname={this.props.sessionInfo.nickname}
               chatLog={this.props.chatLog}
             />
-            {/* {this.props.chatLog.map((msg, i) => <p key={i}>{`${msg.user}: ${msg.text}`}</p>)} */}
           </CardContent>
           <CardActions className={this.props.classes.cardActions}>
             <SendMessageActions
