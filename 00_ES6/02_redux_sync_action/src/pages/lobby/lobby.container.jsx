@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withSessionContext } from '../../common';
 import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
+import { StoreSessionInfo } from '../../actions';
 import { LobbyComponent } from './lobby.component';
 
 class LobbyContainerInner extends React.Component {
@@ -57,12 +59,26 @@ class LobbyContainerInner extends React.Component {
 }
 
 LobbyContainerInner.propTypes = {
-  sessionInfo : PropTypes.object,
-  setChatSessionInfo : PropTypes.func.isRequired,
+  sessionInfo: PropTypes.object,
+  setChatSessionInfo: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 
-export const LobbyContainer = withSessionContext(withRouter(
+const LobbyContainerRect = withRouter(
   LobbyContainerInner
-));
+);
+
+
+const mapStateToProps = (state) => ({
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  setChatSessionInfo: (nickname, room) => dispatch(StoreSessionInfo(nickname, room)),
+});
+export const LobbyContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LobbyContainerRect);
+
+
 
