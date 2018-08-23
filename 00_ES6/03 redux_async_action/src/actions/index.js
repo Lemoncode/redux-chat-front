@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router';
 import { actionIds } from '../common';
 import { canEnrollRoom } from '../api/rooms';
 
@@ -13,7 +14,7 @@ export const canEnrollRequest = (nickname, room) => (dispatch) => {
       Nickname: ${nickname}
       Room: ${room}`);
       dispatch(StoreSessionInfo(nickname, room));
-
+      dispatch(push('/chat'));
     } else {
       // We could leverage this to the reducer
       console.log(`Join room request failed try another nickname`);

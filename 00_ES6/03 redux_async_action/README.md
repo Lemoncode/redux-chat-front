@@ -164,17 +164,129 @@ npm install connected-react-router --save
 
 > This library creates a reducer for the browser history and enables us to access history on actions.
 
+- First we will sotre the router history in a separate object, let's 
+install the _history_ library.
+
+```bash
+npm install history --save
+```
+
+- Let's create an own history object.
+
+_./src/history.js_
+
+```javascript
+import { createHashHistory } from 'history';
+
+export const history = createHashHistory();
+```
+
 - Let's configure the store so the rootReducer is wrapped by _connectRouter_.
 
+_./src/store.js_
+
+```diff
+- import { createStore, applyMiddleware } from 'redux';
++ import { createStore, applyMiddleware, compose } from 'redux';
++ import { routerMiddleware, connectRouter } from 'connected-react-router';
+import { reducers } from './reducers';
+import ReduxThunk from 'redux-thunk';
++ import {history} from './history';
+
+// Add redux dev tool support
+- export const store = createStore(reducers, 
+-                          window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+-                          applyMiddleware(ReduxThunk)
+-                         );  
+
++ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
++
++ const store = createStore(
++  connectRouter(history)(reducers),
++  composeEnhancer(
++    applyMiddleware(
++      routerMiddleware(history),
++      ReduxThunk
++    ),
++  ),
++) 
 ```
-```
+
 - Let's wrap react-router V4 with _ConnectedRouter_ and pass the history as a prop.
 
+_./src/index.jsx_
+
+```diff
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import { HashRouter, Switch, Route } from 'react-router-dom';
++ import { ConnectedRouter } from 'connected-react-router';
+import { store } from './store';
+import {LobbyContainer, ChatContainer} from './pages';
++ import {history} from './history.js';
+
+ReactDOM.render(
+ <Provider store={store}>
++  <ConnectedRouter history={history}>
+-      <HashRouter>
+        <Switch>
+          <Route exact={true} path="/" component={LobbyContainer} />
+          <Route path="/chat" component={ChatContainer} />
+        </Switch>
+-      </HashRouter>
++   </ConnectedRouter>
+ </Provider>  
+  ,
+  document.getElementById('root')
+);
 ```
-```
+
+- Let's do a quick check, start the project, open dev tools and check
+that we got a router reducer.
 
 - Now in the action that we have defined we can directly launch the navigation.
 
+_./src/actions/index.js_
+
+```diff
++ import { push } from 'connected-react-router';
+import { actionIds } from '../common';
+import { canEnrollRoom } from '../api/rooms';
+
+export const StoreSessionInfo = (nickname, room) => ({
+  type: actionIds.SETUP_SESSION_INFO,
+  payload: { nickname, room }
+})
+
+export const canEnrollRequest = (nickname, room) => (dispatch) => {
+  canEnrollRoom(room, nickname).then((succeeded) => {
+    if (succeeded === true) {
+      console.log(`*** Join Room Request succeeded
+      Nickname: ${nickname}
+      Room: ${room}`);
+      dispatch(StoreSessionInfo(nickname, room));
++      dispatch(push('/chat'));
+
+    } else {
+      // We could leverage this to the reducer
+      console.log(`Join room request failed try another nickname`);
+    }
+  });
+  // For the sake of the sample no Error handling, we could add it here
+}
 ```
+
+- Let's run the project and we can check that we are firing a navigation 
+action from the action, and on the other hand the time machine in dev
+tools get synchronized.
+
+```bash
+npm start
 ```
+
+> Now comes a tough decisition, if we build the whole app based on actions
+and reducers we will get a powerful time machine with all the info needed
+to replay any bug, on the other hand, going that way makes the application
+too verbose, too much code sometimes for small features.
 
