@@ -1,2 +1,2 @@
-export {ChatContainer} from './chat';
-export {LobbyContainer} from './lobby';
+export { ChatContainer } from './chat';
+export { LobbyContainer } from './lobby';
