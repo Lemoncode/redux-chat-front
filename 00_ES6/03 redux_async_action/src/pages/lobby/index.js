@@ -1,2 +1,1 @@
-export {LobbyContainer} from './lobby.container';
-
+export { LobbyContainer } from './lobby.container';

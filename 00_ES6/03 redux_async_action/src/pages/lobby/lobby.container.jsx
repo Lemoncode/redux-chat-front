@@ -9,8 +9,11 @@ import { LobbyComponent } from './lobby.component';
 class LobbyContainerInner extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { rooms: [], nickname: '', selectedRoom: '' };
-
+    this.state = {
+      rooms: [],
+      nickname: '',
+      selectedRoom: '',
+    };
     this.fetchRooms = this.fetchRooms.bind(this);
   }
 
@@ -58,7 +61,7 @@ class LobbyContainerInner extends React.Component {
 }
 
 LobbyContainerInner.propTypes = {
-  sessionInfo: PropTypes.object,
+  sessionInfo : PropTypes.object,
   fireSessionEnrollRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };

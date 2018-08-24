@@ -2,8 +2,8 @@ import ioClient from 'socket.io-client';
 
 
 export const messageFactory = (channel, user) => (text) => ({
-  channel, 
-  user, 
+  channel,
+  user,
   text,
 })
 

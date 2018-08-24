@@ -86,7 +86,6 @@ export class ChatContainerInner extends React.Component {
 
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-  setChatSessionInfo: PropTypes.func.isRequired,    
 };
 
 const ChatContainerReact = ChatContainerInner;
