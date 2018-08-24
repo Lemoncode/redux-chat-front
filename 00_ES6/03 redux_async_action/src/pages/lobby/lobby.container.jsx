@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { withSessionContext } from '../../common';
 import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
-import { StoreSessionInfo } from '../../actions';
+import { canEnrollRequest } from '../../actions';
 import { LobbyComponent } from './lobby.component';
 
 class LobbyContainerInner extends React.Component {
@@ -41,7 +40,7 @@ class LobbyContainerInner extends React.Component {
   }
 
   onJoinRoomRequest = () => {
-    this.joinRoomRequest();
+    this.props.fireSessionEnrollRequest(this.state.nickname, this.state.selectedRoom);
   }
 
   render() {
@@ -60,7 +59,7 @@ class LobbyContainerInner extends React.Component {
 
 LobbyContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-  setChatSessionInfo: PropTypes.func.isRequired,
+  fireSessionEnrollRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 };
 
@@ -73,7 +72,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setChatSessionInfo: (nickname, room) => dispatch(StoreSessionInfo(nickname, room)),
+  fireSessionEnrollRequest: (nickname, room) => dispatch(canEnrollRequest(nickname, room)),
 });
 export const LobbyContainer = connect(
   mapStateToProps,
