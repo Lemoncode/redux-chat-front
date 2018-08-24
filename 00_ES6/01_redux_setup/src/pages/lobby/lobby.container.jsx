@@ -8,8 +8,11 @@ import { LobbyComponent } from './lobby.component';
 class LobbyContainerInner extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { rooms: [], nickname: '', selectedRoom: '' };
-
+    this.state = {
+      rooms: [],
+      nickname: '',
+      selectedRoom: '',
+    };
     this.fetchRooms = this.fetchRooms.bind(this);
   }
 

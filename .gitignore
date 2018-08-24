@@ -8,3 +8,4 @@ typings/
 *.log
 **/.vscode/
 package-lock.json
+desktop.ini

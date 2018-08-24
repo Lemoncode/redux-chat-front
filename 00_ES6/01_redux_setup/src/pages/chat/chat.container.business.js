@@ -15,15 +15,13 @@ export const establishRoomSocketConnection = (nickname, room) => {
     return createSocket(socketParams);        
 }
 
-export const messagesToString = (messages) => {
-  let content = '';
-  
-  messages.map((ms) => ({
-    user: ms.userId,
-    text: ms.text
-  })).forEach((mc) => {
-    content += `${mc.user}: ${mc.text}\n`;        
-  });
+export const mapApiSingleMessageToViewmodel = (message) => ({
+  user: message.user,
+  text: message.text,
+});
 
-  return content;
-}
+export const mapApiMessagesToViewmodel = (messages) => 
+  messages.map((msg) => ({
+    user: msg.userId,
+    text: msg.text,
+  }));
