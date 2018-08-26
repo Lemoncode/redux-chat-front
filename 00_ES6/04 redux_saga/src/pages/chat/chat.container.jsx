@@ -57,15 +57,14 @@ export class ChatContainerInner extends React.Component {
 }
 
 ChatContainerInner.propTypes = {
-  //  sessionInfo: PropTypes.object,
-  //  enrollRoom : PropTypes.function,
-  //  sendMessage : PropTypes.function,
-  //  chatLog: PropTypes.array,  
-  //  sendMessage : PropTypes.function,
-  // disconnect : PropTypes.function,  
+  sessionInfo: PropTypes.object,
+  enrollRoom : PropTypes.func,  
+  chatLog: PropTypes.array,  
+  sendMessage : PropTypes.func,
+  disconnect : PropTypes.func,  
 };
 
-const ChatContainerReact = ChatContainerInner;
+//const ChatContainerReact = ChatContainerInner;
 
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
@@ -81,5 +80,5 @@ const mapDispatchToProps = (dispatch) => ({
 export const ChatContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ChatContainerReact);
+)(ChatContainerInner);
 

@@ -422,7 +422,7 @@ _./src/pages/chat/chat.container.jsx_
 ```diff
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-+  enrollRoom : PropTypes.function,
++  enrollRoom : PropTypes.func,
 };
 
 const ChatContainerReact = ChatContainerInner;
@@ -582,8 +582,8 @@ _./src/pages/chat/chat.container.jsx_
 
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-  enrollRoomRequest : PropTypes.function,
-+  sendMessage : PropTypes.function,
+  enrollRoomRequest : PropTypes.func,
++  sendMessage : PropTypes.func,
   chatLog: PropTypes.array,    
 };
 
@@ -632,11 +632,10 @@ First let's import the proper action.
 
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-  enrollRoom : PropTypes.function,
-  sendMessage : PropTypes.function,
+  enrollRoom : PropTypes.func,
+  sendMessage : PropTypes.func,
   chatLog: PropTypes.array,  
-  sendMessage : PropTypes.function,
-+ disconnect : PropTypes.function,  
++ disconnect : PropTypes.func,  
 };
 
 const ChatContainerReact = ChatContainerInner;
