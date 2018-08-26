@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { messageFactory } from '../../api/chat'
 import { connect } from 'react-redux';
-import { EnrollRoomRequest, sendMessage } from '../../actions';
+import { EnrollRoomRequest, sendMessage, disconnectRoomRequest } from '../../actions';
 import { ChatComponent } from './chat.component';
 import {
   establishRoomSocketConnection,
@@ -17,10 +17,7 @@ export class ChatContainerInner extends React.Component {
 
     this.state = {
       currentMessage: '',
-      chatLog: [],
     };
-    this.socket = null;
-    this.messageFactory = null;
   }
 
   enrollRoom = () => {
@@ -28,29 +25,7 @@ export class ChatContainerInner extends React.Component {
   }
 
   disconnectfromRoom = () => {
-    this.socket.disconnect();
-  }
-
-  setupSocketListeners(socket) {
-    socket.on('connect', () => {
-      console.log(socket.id);
-      socket.emit('messages');
-    });
-    socket.on('error', (err) => console.log(err));
-    socket.on('disconnect', () => console.log('disconnected'))
-
-    socket.on('message', (msg) => {
-      console.log(msg);
-      this.setState({
-        chatLog: [...this.state.chatLog, mapApiSingleMessageToViewmodel(msg)],
-      });
-    });
-    socket.on('messages', (msgs) => {
-      const mappedMessages = mapApiMessagesToViewmodel(msgs);
-      this.setState({
-        chatLog: this.state.chatLog.concat(mappedMessages),
-      });
-    });
+    this.props.disconnect();
   }
 
   onFieldChange = (id) => (value) => {
@@ -87,6 +62,7 @@ ChatContainerInner.propTypes = {
   //  sendMessage : PropTypes.function,
   //  chatLog: PropTypes.array,  
   //  sendMessage : PropTypes.function,
+  // disconnect : PropTypes.function,  
 };
 
 const ChatContainerReact = ChatContainerInner;
@@ -99,6 +75,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   enrollRoom: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
   sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),
+  disconnect: () => dispatch(disconnectRoomRequest()),
 });
 
 export const ChatContainer = connect(

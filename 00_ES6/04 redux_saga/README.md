@@ -616,8 +616,136 @@ _./src/pages/chat/chat.container.jsx_
 -    }
   }
 ```
+- Let's give a quick try and check that sendMessage is working.
 
-> This could be simplified, passing _messageFactory_ code to the action (we will need to setup nickname and room)
+```bash
+npm start
+```
+
+- Time to handle disconnection using actions.
+
+First let's import the proper action.
+
+```diff
++ import { EnrollRoomRequest, sendMessage, disconnectRoomRequest } from '../../actions';
+// ...
+
+ChatContainerInner.propTypes = {
+  sessionInfo: PropTypes.object,
+  enrollRoom : PropTypes.function,
+  sendMessage : PropTypes.function,
+  chatLog: PropTypes.array,  
+  sendMessage : PropTypes.function,
++ disconnect : PropTypes.function,  
+};
+
+const ChatContainerReact = ChatContainerInner;
+
+const mapStateToProps = (state) => ({
+  sessionInfo: state.sessionInfoReducer,
+  chatLog: state.chatLogReducer,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  enrollRoom: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
+  sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),
++ disconnect: () => dispatch(disconnectRoomRequest()),
+});
+
+```
+
+Let's jump into the component code and replace disconnection with this action:
+
+```diff
+disconnectfromRoom = () => {  
+-  this.socket.disconnect();
+   this.props.disconnect();
+}
+```
+
+- Now that we have ported all the socket managements to actions/sagas, it's time to perform some cleanup in our 
+componente code.
+
+```diff
+export class ChatContainerInner extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentMessage: '',
+-      chatLog: [],
+    };
+-    this.socket = null;
+-    this.messageFactory = null;
+  }
+
+  enrollRoom = () => {
+    this.props.enrollRoom(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
+  }
+
+  disconnectfromRoom = () => {
+    this.props.disconnect();
+  }
+
+-  setupSocketListeners(socket) {
+-    socket.on('connect', () => {
+-      console.log(socket.id);
+-      socket.emit('messages');
+-    });
+-    socket.on('error', (err) => console.log(err));
+-    socket.on('disconnect', () => console.log('disconnected'))
+-
+-    socket.on('message', (msg) => {
+-      console.log(msg);
+-      this.setState({
+-        chatLog: [...this.state.chatLog, mapApiSingleMessageToViewmodel(msg)],
+-      });
+-    });
+-    socket.on('messages', (msgs) => {
+-      const mappedMessages = mapApiMessagesToViewmodel(msgs);
+-      this.setState({
+-        chatLog: this.state.chatLog.concat(mappedMessages),
+-      });
+-    });
+-  }
+
+  onFieldChange = (id) => (value) => {
+    this.setState({ [id]: value })
+  }
+
+  onSendMessage = () => {
+    if (this.state.currentMessage) {
+      this.props.sendMessage(this.props.sessionInfo.nickname, this.props.sessionInfo.room, this.state.currentMessage);
+    }
+  }
+
+  render() {
+    const { sessionInfo } = this.props;
+    return (
+      <React.Fragment>
+        <ChatComponent
+          sessionInfo={sessionInfo}
+          enrollRoom={this.enrollRoom}
+          disconnectFromRoom={this.disconnectfromRoom}
+          currentMessage={this.state.currentMessage}
+          onFieldChange={this.onFieldChange}
+          onSendMessage={this.onSendMessage}
+          chatLog={this.props.chatLog}
+        />
+      </React.Fragment>
+    );
+  }
+}
+```
+
+There is still from improvement, as an excercise, some tips:
+  - Disconnect function, you can directly call the props.disconnect in the component markup.
+  - Convert component to stateless:
+    - Include in the redux cycle the field change (remove the need to store in state current message).
+    - Convert this component into stateless.
+
+  
 
 
 
