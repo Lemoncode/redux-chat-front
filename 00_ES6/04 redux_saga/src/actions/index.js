@@ -28,20 +28,25 @@ export const EnrollRoomRequest = (nickname, room) => ({
   payload: { nickname, room }
 });
 
-export const DisconnectRoomRequest = () => ({
+export const disconnectRoomRequest = () => ({
   type: actionIds.DISCONNECT,  
 });
 
-export const OnDisconnect = () => ({
+export const onDisconnect = () => ({
   type: actionIds.ON_DISCONNECT,  
 });
 
-export const OnMessageReceived = (message) => ({
+export const onMessageReceived = (message) => ({
   type: actionIds.MESSAGE_RECEIVED, 
   payload: message,
 });
 
-export const OnMessageListReceived = (messageList) => ({
+export const onMessageListReceived = (messageList) => ({
   type: actionIds.MESSAGE_LIST_RECEIVED, 
   payload: messageList,
+});
+
+export const sendMessage = (message) => ({
+  type: actionIds.SEND_MESSAGE, 
+  payload: message,
 });

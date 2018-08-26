@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { messageFactory } from '../../api/chat'
 import { connect } from 'react-redux';
+import { EnrollRoomRequest } from '../../actions';
 import { ChatComponent } from './chat.component';
 import {
   establishRoomSocketConnection,
@@ -23,9 +24,7 @@ export class ChatContainerInner extends React.Component {
   }
   
   enrollRoom = () => {
-    this.socket = establishRoomSocketConnection(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
-    this.messageFactory = messageFactory(this.props.sessionInfo.room, this.props.sessionInfo.nickname);
-    this.setupSocketListeners(this.socket);
+    this.props.enrollRoomRequest(this.props.sessionInfo.nickname, this.props.sessionInfo.room);    
   }
 
   disconnectfromRoom = () => {
@@ -92,9 +91,11 @@ const ChatContainerReact = ChatContainerInner;
 
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
+  enrollRoomRequest : PropTypes.function,
 })
 
 const mapDispatchToProps = (dispatch) => ({
+  enrollRoomRequest: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
 });
 
 export const ChatContainer = connect(

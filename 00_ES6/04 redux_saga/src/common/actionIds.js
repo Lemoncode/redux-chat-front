@@ -4,5 +4,6 @@ export const actionIds = {
   DISCONNECT: '[3] User wants to disconnect',
   ON_DISCONNECT: '[4] Server notifies disconnection',
   MESSAGE_RECEIVED: '[5] Chat message received from socket',
-  MESSAGE_LIST_RECEIVED: '[6] Chat message list received from socket',  
+  MESSAGE_LIST_RECEIVED: '[6] Chat message list received from socket',
+  SEND_MESSAGE:'[7] Send message to the server',
 }
