@@ -1,10 +1,7 @@
 import { actionIds } from '../common';
 import { mapApiSingleMessageToStateModel, mapApiMessagesToStateModel } from './chat-log.business';
 
-// TODO: Javi Calzado update to new refactor, do not use string structure
-// use message structure
 const defaultState = () => [];
-
 
 export const chatLogReducer = (state = defaultState(), action) => {
   switch (action.type) {
