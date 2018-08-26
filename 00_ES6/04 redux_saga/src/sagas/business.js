@@ -1,3 +1,5 @@
+import { createSocket } from '../api/chat'
+
 export const establishRoomSocketConnection = (nickname, room) => {
   // TODO: move this to env variable
   const baseUrl = 'http://localhost:3000';

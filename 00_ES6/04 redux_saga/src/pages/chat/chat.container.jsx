@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { messageFactory } from '../../api/chat'
 import { connect } from 'react-redux';
-import { EnrollRoomRequest } from '../../actions';
+import { EnrollRoomRequest, sendMessage } from '../../actions';
 import { ChatComponent } from './chat.component';
 import {
   establishRoomSocketConnection,
@@ -11,20 +11,20 @@ import {
 } from './chat.container.business'
 
 export class ChatContainerInner extends React.Component {
-  
+
   constructor(props) {
     super(props);
 
     this.state = {
       currentMessage: '',
       chatLog: [],
-    };    
+    };
     this.socket = null;
     this.messageFactory = null;
   }
-  
+
   enrollRoom = () => {
-    this.props.enrollRoomRequest(this.props.sessionInfo.nickname, this.props.sessionInfo.room);    
+    this.props.enrollRoom(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
   }
 
   disconnectfromRoom = () => {
@@ -57,11 +57,9 @@ export class ChatContainerInner extends React.Component {
     this.setState({ [id]: value })
   }
 
-  onSendMessage = () => {    
-    if(this.state.currentMessage && this.messageFactory) {
-      const message = this.messageFactory(this.state.currentMessage)
-      this.socket.emit('message', message); 
-      this.setState({currentMessage: ''});
+  onSendMessage = () => {
+    if (this.state.currentMessage) {
+      this.props.sendMessage(this.props.sessionInfo.nickname, this.props.sessionInfo.room, this.state.currentMessage);
     }
   }
 
@@ -69,14 +67,14 @@ export class ChatContainerInner extends React.Component {
     const { sessionInfo } = this.props;
     return (
       <React.Fragment>
-        <ChatComponent 
-          sessionInfo={sessionInfo} 
+        <ChatComponent
+          sessionInfo={sessionInfo}
           enrollRoom={this.enrollRoom}
           disconnectFromRoom={this.disconnectfromRoom}
           currentMessage={this.state.currentMessage}
           onFieldChange={this.onFieldChange}
           onSendMessage={this.onSendMessage}
-          chatLog={this.state.chatLog}
+          chatLog={this.props.chatLog}
         />
       </React.Fragment>
     );
@@ -84,18 +82,23 @@ export class ChatContainerInner extends React.Component {
 }
 
 ChatContainerInner.propTypes = {
-  sessionInfo: PropTypes.object,
+  //  sessionInfo: PropTypes.object,
+  //  enrollRoom : PropTypes.function,
+  //  sendMessage : PropTypes.function,
+  //  chatLog: PropTypes.array,  
+  //  sendMessage : PropTypes.function,
 };
 
 const ChatContainerReact = ChatContainerInner;
 
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
-  enrollRoomRequest : PropTypes.function,
+  chatLog: state.chatLogReducer,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  enrollRoomRequest: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
+  enrollRoom: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
+  sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),
 });
 
 export const ChatContainer = connect(

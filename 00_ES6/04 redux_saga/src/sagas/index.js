@@ -1,28 +1,33 @@
 import { messageFactory } from '../api/chat'
 import io from 'socket.io-client';
+import { eventChannel } from 'redux-saga';
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import {actionIds} from '../common';
 import {
-  EnrollRoomRequest, DisconnectRoomRequest, OnDisconnect,
-  OnMessageReceived, OnMessageListReceived, SendMessage
+  EnrollRoomRequest, disconnectRoomRequest, onDisconnect,
+  onMessageReceived, onMessageListReceived, sendMessage
 } from '../actions';
+import {establishRoomSocketConnection} from './business';
 
 
 function connect(sessionInfo) {
   const socket = establishRoomSocketConnection(sessionInfo.nickname, sessionInfo.room);
-  socket.on('connect', () => {
-    socket.emit('messages');
-    resolve(socket);
-  });
+
+  return new Promise(resolve =>
+    socket.on('connect', () => {
+      socket.emit('messages');
+      resolve(socket);
+    })  
+  );
 }
 
 function subscribe(socket) {
   return eventChannel(emit => {
     socket.on('message', (message) => {
-      emit(OnMessageReceived(message));
+      emit(onMessageReceived(message));
     });
     socket.on('messages', (messageList) => {
-      emit(OnMessageListReceived(messageList));
+      emit(onMessageListReceived(messageList));
     });
     socket.on('disconnect', e => {
       // TODO: handle
@@ -50,12 +55,18 @@ function* write(socket) {
   }
 }
 
+function* handleIO(socket) {
+  yield fork(read, socket);
+  yield fork(write, socket);
+}
+
+
 function* flow() {
   while (true) {
     let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
     const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});
     const task = yield fork(handleIO, socket);
-    const action = yield take(DisconnectRoomRequest);
+    const action = yield take(actionIds.DISCONNECT);
     socket.disconnect();    
   }
 }

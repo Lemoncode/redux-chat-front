@@ -1,6 +1,7 @@
 import { push } from 'connected-react-router';
 import { actionIds } from '../common';
 import { canEnrollRoom } from '../api/rooms';
+import { messageFactory } from '../api/chat';
 
 export const StoreSessionInfo = (nickname, room) => ({
   type: actionIds.SETUP_SESSION_INFO,
@@ -46,7 +47,7 @@ export const onMessageListReceived = (messageList) => ({
   payload: messageList,
 });
 
-export const sendMessage = (message) => ({
+export const sendMessage = (nickname, room, text) => ({
   type: actionIds.SEND_MESSAGE, 
-  payload: message,
+  payload: messageFactory(nickname, room, text),
 });

@@ -25,5 +25,5 @@ export const handleMessageReceived = (state, message) => ([
 
 export const handleMessageListReceived = (state, messageList) => ([
   ...state,
-  mapApiMessagesToStateModel(messageList),
+  ...mapApiMessagesToStateModel(messageList),
 ]);

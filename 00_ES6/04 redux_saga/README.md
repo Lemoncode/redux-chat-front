@@ -123,10 +123,25 @@ export const handleMessageReceived = (state, message) => ([
 
 export const handleMessageListReceived = (state, messageList) => ([
   ...state,
-  mapApiMessagesToStateModel(messageList),
+  ...mapApiMessagesToStateModel(messageList),
 ]);
 ```
 > Usually this would be time to create unit tests and ensure the reducer is behaving properly (just to progress with the tutorial testing will be covered later on).
+
+- Let's register this reducer into the root reducer.
+
+_./src/reducers/index.js_
+
+```diff
+import { combineReducers } from 'redux';
+import { sessionInfoReducer } from './session-info';
++ import { chatLogReducer } from './chat-log';
+
+export const reducers = combineReducers({
+  sessionInfoReducer,
+  chatLogReducer,
+});
+```
 
 - Now let's start with the Saga.
 
@@ -139,11 +154,12 @@ _./src/sagas/index.js_
 ```javascript
 import { messageFactory } from '../api/chat'
 import io from 'socket.io-client';
+import { eventChannel } from 'redux-saga';
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import {actionIds} from '../common';
 import {
-  EnrollRoomRequest, DisconnectRoomRequest, OnDisconnect, OnMessageReceived, 
-  OnMessageListReceived, SendMessage
+  EnrollRoomRequest, disconnectRoomRequest, onDisconnect, onMessageReceived, 
+  onMessageListReceived, SendMessage
 } from '../actions';
 
 function* flow() {
@@ -175,7 +191,7 @@ let's append this helper at the bottom of the file.
 _./src/sagas/business.js_
 
 ```javascript
-import { createSocket } from '../../api'
+import { createSocket } from '../api/chat'
 
 export const establishRoomSocketConnection = (nickname, room) => {
     // TODO: move this to env variable
@@ -201,12 +217,19 @@ from the room that we have connected.
 _./src/sagas/index.js_
 
 ```diff
-+ function connect(sessionInfo) {  
++ import {establishRoomSocketConnection} from './business';
+
+// ...
+
++ function connect(sessionInfo) {
 +  const socket = establishRoomSocketConnection(sessionInfo.nickname, sessionInfo.room);
-+   socket.on('connect', () => {
-+     socket.emit('messages');
-+     resolve(socket);
-+   });
++
++  return new Promise(resolve =>
++    socket.on('connect', () => {
++      socket.emit('messages');
++      resolve(socket);
++    })  
++  );
 + }
 
 function* flow() {
@@ -227,10 +250,10 @@ _./src/sagas/index.js_
 function subscribe(socket) {
   return eventChannel(emit => {
     socket.on('message', (message) => {
-      emit(OnMessageReceived(message));
+      emit(onMessageReceived(message));
     });
     socket.on('messages', (messageList) => {
-      emit(OnMessageListReceived(messageList));
+      emit(onMessageListReceived(messageList));
     });
     socket.on('disconnect', e => {
       // TODO: handle
@@ -314,7 +337,7 @@ function* flow() {
     let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
     const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});
     const task = yield fork(handleIO, socket);
-+    const action = yield take(DisconnectRoomRequest);
++    const action = yield take(actionIds.DISCONNECT);
 +    socket.disconnect();
   }
 }
@@ -399,7 +422,7 @@ _./src/pages/chat/chat.container.jsx_
 ```diff
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-+  enrollRoomRequest : PropTypes.function,
++  enrollRoom : PropTypes.function,
 };
 
 const ChatContainerReact = ChatContainerInner;
@@ -409,7 +432,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-+  enrollRoomRequest: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
++  enrollRoom: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
 });
 
 export const ChatContainer = connect(
@@ -420,6 +443,8 @@ export const ChatContainer = connect(
 
 - Now it's time to replace the chat inner component method _enrollRoom_ with the action that the chat saga is waitin for
 to connect the socket.
+
+_./src/pages/chat/chat.container.jsx_
 
 ```diff
 export class ChatContainerInner extends React.Component {
@@ -439,13 +464,160 @@ export class ChatContainerInner extends React.Component {
 -    this.socket = establishRoomSocketConnection(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
 -    this.messageFactory = messageFactory(this.props.sessionInfo.room, this.props.sessionInfo.nickname);
 -    this.setupSocketListeners(this.socket);
-+    this.props.enrollRoomRequest(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
++    this.props.enrollRoom(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
   }
 
   disconnectfromRoom = () => {
     this.socket.disconnect();
   }
 ```
+
+- Time to do a quick check, if we start the app and open redux devtool we can check that initial message list
+is sent to the chatlog reducer.
+
+```bash
+npm start
+```
+
+- Let's keep on replacing chatlog component logic with the one we have with actions and sagas.
+
+Time to read the chat log from the reducer.
+
+Let's start with the redux container and expose the property down.
+
+```diff
+ChatContainerInner.propTypes = {
+  sessionInfo: PropTypes.object,
++  chatLog: PropTypes.array,  
+};
+
+const ChatContainerReact = ChatContainerInner;
+
+const mapStateToProps = (state) => ({
+  sessionInfo: state.sessionInfoReducer,
++  chatLog: state.chatLogReducer,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  enrollRoomRequest: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
+});
+```
+
+- Let's update the component:
+
+_./src/pages/chat/chat.container.jsx_
+
+```diff
+  render() {
+    const { sessionInfo } = this.props;
+    return (
+      <React.Fragment>
+        <ChatComponent 
+          sessionInfo={sessionInfo} 
+          enrollRoom={this.enrollRoom}
+          disconnectFromRoom={this.disconnectfromRoom}
+          currentMessage={this.state.currentMessage}
+          onFieldChange={this.onFieldChange}
+          onSendMessage={this.onSendMessage}
+-          chatLog={this.state.chatLog}
++ -        chatLog={this.props.chatLog}
+        />
+      </React.Fragment>
+    );
+  }
+}
+```
+
+- Let's simplify _messageFactory_ helper we will ad non currified version of the function.
+
+_./src/api/chat.js_
+
+```diff
+- export const messageFactory = (channel, user) => (text) => ({
+-  channel,
+-  user,
+-  text,
+- })
+
++ export const messageFactory = (nickname, room, text) => ({
++  channel: room,
++  user: nickname,
++  text
++})
+```
+
+- Let's give more power to the _sendMessage_ action (it will help us simplify the component):
+
+_./src/actions/index.js_
+
+```diff
+import { push } from 'connected-react-router';
+import { actionIds } from '../common';
+import { canEnrollRoom } from '../api/rooms';
++ import { messageFactory } from '../api/chat';
+
+//...
+
+export const sendMessage = (nickame, room, text) => ({
+  type: actionIds.SEND_MESSAGE, 
+-   payload: message,  
++   payload: messageFactory(nickname, room, text),
+});
+```
+
+> We could write this action create as a function with several lines of code and a return statement.
+
+
+Next step is to replace the send message logic with the one stored in the action / saga.
+
+Let's first work with the redux container and react container props.
+
+_./src/pages/chat/chat.container.jsx_
+
+```diff
+- import { EnrollRoomRequest } from '../../actions';
++ import { EnrollRoomRequest, sendMessage } from '../../actions';
+
+// ... 
+
+ChatContainerInner.propTypes = {
+  sessionInfo: PropTypes.object,
+  enrollRoomRequest : PropTypes.function,
++  sendMessage : PropTypes.function,
+  chatLog: PropTypes.array,    
+};
+
+const ChatContainerReact = ChatContainerInner;
+
+const mapStateToProps = (state) => ({
+  sessionInfo: state.sessionInfoReducer,
+  chatLog: state.chatLogReducer,  
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  enrollRoomRequest: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
++  sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),   
+});
+```
+
+And let's replace the component code:
+
+_./src/pages/chat/chat.container.jsx_
+
+```diff
+  onSendMessage = () => {   
++    if(this.state.currentMessage) {
++       this.props.sendMessage(this.props.sessionInfo.nickname, this.props.sessionInfo.room, this.state.currentMessage);
++    }
+-    if(this.state.currentMessage && this.messageFactory) {
+-      const message = this.messageFactory(this.state.currentMessage)
+-      this.socket.emit('message', message); 
+-      this.setState({currentMessage: ''});
+-    }
+  }
+```
+
+> This could be simplified, passing _messageFactory_ code to the action (we will need to setup nickname and room)
 
 
 
