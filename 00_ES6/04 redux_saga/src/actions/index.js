@@ -22,3 +22,26 @@ export const canEnrollRequest = (nickname, room) => (dispatch) => {
   });
   // For the sake of the sample no Error handling, we could add it here
 }
+
+export const EnrollRoomRequest = (nickname, room) => ({
+  type: actionIds.ENROLL_ROOM_REQUEST,
+  payload: { nickname, room }
+});
+
+export const DisconnectRoomRequest = () => ({
+  type: actionIds.DISCONNECT,  
+});
+
+export const OnDisconnect = () => ({
+  type: actionIds.ON_DISCONNECT,  
+});
+
+export const OnMessageReceived = (message) => ({
+  type: actionIds.MESSAGE_RECEIVED, 
+  payload: message,
+});
+
+export const OnMessageListReceived = (messageList) => ({
+  type: actionIds.MESSAGE_LIST_RECEIVED, 
+  payload: messageList,
+});
