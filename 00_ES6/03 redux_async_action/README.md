@@ -43,7 +43,7 @@ _./src/actions/index.js_
 import { actionIds } from '../common';
 + import { canEnrollRoom } from '../api/rooms';
 
-export const StoreSessionInfo = (nickname, room) => ({
+export const storeSessionInfo = (nickname, room) => ({
   type: actionIds.SETUP_SESSION_INFO,
   payload: {nickname, room}
 })
@@ -54,7 +54,7 @@ export const StoreSessionInfo = (nickname, room) => ({
 +      console.log(`*** Join Room Request succeeded
 +      Nickname: ${nickname}
 +      Room: ${room}`);
-+      dispatch(StoreSessionInfo(nickname, room));
++      dispatch(storeSessionInfo(nickname, room));
 +
 +    } else {
 +      // We could leverage this to the reducer
@@ -106,7 +106,7 @@ _./src/pages/lobby/lobby.container.jsx_
 
 ```diff
 const mapDispatchToProps = (dispatch) => ({
--   setChatSessionInfo: (nickname, room) => dispatch(StoreSessionInfo(nickname, room)),
+-   setChatSessionInfo: (nickname, room) => dispatch(storeSessionInfo(nickname, room)),
 +   fireSessionEnrollRequest: (nickname, room) => dispatch(canEnrollRequest(nickname, room)), 
 });
 
@@ -254,7 +254,7 @@ _./src/actions/index.js_
 import { actionIds } from '../common';
 import { canEnrollRoom } from '../api/rooms';
 
-export const StoreSessionInfo = (nickname, room) => ({
+export const storeSessionInfo = (nickname, room) => ({
   type: actionIds.SETUP_SESSION_INFO,
   payload: { nickname, room }
 })
@@ -265,7 +265,7 @@ export const canEnrollRequest = (nickname, room) => (dispatch) => {
       console.log(`*** Join Room Request succeeded
       Nickname: ${nickname}
       Room: ${room}`);
-      dispatch(StoreSessionInfo(nickname, room));
+      dispatch(storeSessionInfo(nickname, room));
 +      dispatch(push('/chat'));
 
     } else {
