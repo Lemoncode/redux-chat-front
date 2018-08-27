@@ -14,14 +14,3 @@ export const establishRoomSocketConnection = (nickname, room) => {
     
     return createSocket(socketParams);        
 }
-
-export const mapApiSingleMessageToViewmodel = (message) => ({
-  user: message.user,
-  text: message.text,
-});
-
-export const mapApiMessagesToViewmodel = (messages) => 
-  messages.map((msg) => ({
-    user: msg.userId,
-    text: msg.text,
-  }));
