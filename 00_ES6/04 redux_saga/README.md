@@ -10,7 +10,7 @@ A good starting point: https://github.com/kuy/redux-saga-chat-example
 - Let's install _redux-saga_.
 
 ```bash
-npm install redux-saga;
+npm install redux-saga
 ```
 
 - Let's define actions for:
@@ -35,30 +35,30 @@ export const actionIds = {
 + SEND_MESSAGE:'[7] Send message to the server',
 }
 ```
-Let's append this actions to the _actions/index_ file.
+Let's append this actions to the _actions/index_ file (bottom of the file).
 
 _./src/actions/index.js_
 
 ```javascript
-export const EnrollRoomRequest = (nickname, room) => ({
+export const enrollRoomRequest = (nickname, room) => ({
   type: actionIds.ENROLL_ROOM_REQUEST,
   payload: { nickname, room }
 });
 
-export const DisconnectRoomRequest = () => ({
+export const disconnectRoomRequest = () => ({
   type: actionIds.DISCONNECT,  
 });
 
-export const OnDisconnect = () => ({
+export const onDisconnect = () => ({
   type: actionIds.ON_DISCONNECT,  
 });
 
-export const OnMessageReceived = (message) => ({
+export const onMessageReceived = (message) => ({
   type: actionIds.MESSAGE_RECEIVED, 
   payload: message,
 });
 
-export const OnMessageListReceived = (messageList) => ({
+export const onMessageListReceived = (messageList) => ({
   type: actionIds.MESSAGE_LIST_RECEIVED, 
   payload: messageList,
 });
@@ -71,7 +71,7 @@ export const sendMessage = (message) => ({
 
 > Could it be a good idea to refactor? We could split and create two files _lobbyActions_, _chatActions_.
 
-- Before creating the reducers let's move the message mappers from the _chat.container.business_ to
+- Before creating the reducers let's move the message mappers from the _./src/pages/chat/chat.container.business_ to
 _chatlog.mapper.js_, and perform a rename on the function names.
 
 _./src/reducers/chat-log.business.js_
@@ -89,7 +89,8 @@ export const mapApiMessagesToStateModel = (messages) =>
   }));
 ```
 
-> We can remove that functions from _chat.container.business.js_
+> We can remove that functions from _./src/pages/chat/chat.container.business.js_
+
 
 - Then let's create a reducer that will hold the chat information.
 
@@ -136,8 +137,9 @@ import { sessionInfoReducer } from './session-info';
 + import { chatLogReducer } from './chat-log';
 
 export const reducers = combineReducers({
-  sessionInfoReducer,
-  chatLogReducer,
+-  sessionInfoReducer,
++  sessionInfoReducer,
++  chatLogReducer,
 });
 ```
 
@@ -156,7 +158,7 @@ import { eventChannel } from 'redux-saga';
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import {actionIds} from '../common';
 import {
-  EnrollRoomRequest, disconnectRoomRequest, onDisconnect, onMessageReceived, 
+  enrollRoomRequest, disconnectRoomRequest, onDisconnect, onMessageReceived, 
   onMessageListReceived, SendMessage
 } from '../actions';
 
@@ -182,10 +184,8 @@ function* flow() {
 }
 ```
 
-- Before connecting the socket let's copy from _chat.container.business.js_ the function named
-_establishRoomSocketConnection_ (rather we could place this in a _api_ or _common_ folder),
-let's append this helper at the bottom of the file.
-
+- Before connecting the socket let's copy from _./src/pages/chat.container.business.js_ the function named
+_establishRoomSocketConnection_ (rather we could place this in a _api_ or _common_ folder).
 _./src/sagas/business.js_
 
 ```javascript
@@ -245,7 +245,7 @@ function* flow() {
 }
 ```
 
-- We will create a channel that will establish all the socket event listeners
+- Right after the _connect_ function, We will create a channel that will establish all the socket event listeners
 (message, messages, disconnect..), this will let us listen for actions in the channel to be launched and another
 saga will listen to this channel and dispatch them.
 
@@ -359,16 +359,6 @@ function* flow() {
 }
 ```
 
-Let's create a _rootSaga_ that will be the public entry point.
-
-_./src/sagas/index.js_
-
-```javascript
-export function* rootSaga() {
-  yield fork(flow);
-}
-```
-
 - Is time to setup the saga middleware and add our _rootSaga_ to the loop.
 
 _./src/store.js_
@@ -408,14 +398,14 @@ is up and running (nothing will be displayed on screen).
 npm start
 ```
 
-> Expected result, no console errors, breakpoint on _rootSaga_ stops, that's it.
+> Expected result, no console errors, breakpoint on _rootSaga_ stops, that's it (_./src/sagas/index.js_).
 
 - Let's start configuring the chat redux container and start updating the chat react container. We will proceed
 step by step.
 
-First let's expose the _EnrollRoomRequest_ to the container.
+First let's expose the _enrollRoomRequest_ to the container.
 
-We will import the _EnrollRoomrequest_ action.
+We will import the _enrollRoomrequest_ action.
 
 _./src/pages/chat/chat.container.jsx_
 
@@ -424,7 +414,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { messageFactory } from '../../api/chat'
 import { connect } from 'react-redux';
-+ import { EnrollRoomRequest } from '../../actions';
++ import { enrollRoomRequest } from '../../actions';
 import { ChatComponent } from './chat.component';
 import {
   establishRoomSocketConnection,
@@ -448,7 +438,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-+  enrollRoom: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
++  enrollRoom: (nickname, room) => dispatch(enrollRoomRequest(nickname, room)),
 });
 
 export const ChatContainer = connect(
@@ -504,6 +494,7 @@ Let's start with the redux container and expose the property down.
 ```diff
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
+  enrollRoom : PropTypes.func,
 +  chatLog: PropTypes.array,  
 };
 
@@ -515,7 +506,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  enrollRoomRequest: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
+  enrollRoomRequest: (nickname, room) => dispatch(enrollRoomRequest(nickname, room)),
 });
 ```
 
@@ -574,7 +565,8 @@ import { canEnrollRoom } from '../api/rooms';
 
 //...
 
-export const sendMessage = (nickame, room, text) => ({
+- export const sendMessage = (message) => ({
++ export const sendMessage = (nickname, room, text) => ({
   type: actionIds.SEND_MESSAGE, 
 -   payload: message,  
 +   payload: messageFactory(nickname, room, text),
@@ -591,14 +583,14 @@ Let's first work with the redux container and react container props.
 _./src/pages/chat/chat.container.jsx_
 
 ```diff
-- import { EnrollRoomRequest } from '../../actions';
-+ import { EnrollRoomRequest, sendMessage } from '../../actions';
+- import { enrollRoomRequest } from '../../actions';
++ import { enrollRoomRequest, sendMessage } from '../../actions';
 
 // ... 
 
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
-  enrollRoomRequest : PropTypes.func,
+  enrollRoom : PropTypes.func,
 +  sendMessage : PropTypes.func,
   chatLog: PropTypes.array,    
 };
@@ -611,7 +603,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  enrollRoomRequest: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
+  enrollRoomRequest: (nickname, room) => dispatch(enrollRoomRequest(nickname, room)),
 +  sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),   
 });
 ```
@@ -632,6 +624,17 @@ _./src/pages/chat/chat.container.jsx_
 -    }
   }
 ```
+
+- Before giving a try let's remove _this.socket.disconnect_
+
+_./src/pages/chat/chat.container.jsx_
+```diff
+disconnectfromRoom = () => {
+-  this.socket.disconnect();
+}
+```
+
+
 - Let's give a quick try and check that sendMessage is working.
 
 ```bash
@@ -643,7 +646,7 @@ npm start
 First let's import the proper action.
 
 ```diff
-+ import { EnrollRoomRequest, sendMessage, disconnectRoomRequest } from '../../actions';
++ import { enrollRoomRequest, sendMessage, disconnectRoomRequest } from '../../actions';
 // ...
 
 ChatContainerInner.propTypes = {
