@@ -82,7 +82,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
-- import { canEnrollRequest } from '../../actions';
+- import { storeSessionInfo } from '../../actions';
 + import { canEnrollRequest } from '../../actions';
 import { LobbyComponent } from './lobby.component';
 ```
@@ -153,19 +153,18 @@ _./src/pages/lobby/lobby.container.jsx_
 npm start
 ```
 
-- So far so good, BUT how can we navigate to a different page when the enrollment has succeeded? Is time to connect React
+- So far so good, **BUT how can we navigate to a different page when the enrollment has succeeded?** Is time to connect React
 Router with the Redux architecture.
 
 - Let's install _connected-react-router_ library (https://github.com/supasate/connected-react-router):
 
-```
+```bash
 npm install connected-react-router --save
 ```
 
 > This library creates a reducer for the browser history and enables us to access history on actions.
 
-- First we will sotre the router history in a separate object, let's 
-install the _history_ library.
+- First we will sotre the router history in a separate object, let's install the _history_ library.
 
 ```bash
 npm install history --save
@@ -201,7 +200,7 @@ import ReduxThunk from 'redux-thunk';
 
 + const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 +
-+ const store = createStore(
++ export const store = createStore(
 +  connectRouter(history)(reducers),
 +  composeEnhancer(
 +    applyMiddleware(
