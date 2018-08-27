@@ -37,7 +37,7 @@ _./src/actions/index.js_
 ```javascript
 import { actionIds } from '../common';
 
-export const StoreSessionInfo = (nickname, room) => ({
+export const storeSessionInfo = (nickname, room) => ({
   type: actionIds.SETUP_SESSION_INFO,
   payload: {nickname, room}
 })
@@ -99,7 +99,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { withSessionContext } from '../../common';
 import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
-+ import {StoreSessionInfo} from '../../actions';
++ import {storeSessionInfo} from '../../actions';
 import { LobbyComponent } from './lobby.component';
 ```
 
@@ -112,7 +112,7 @@ _./src/pages/lobby/lobby.container.js_
 +  })
 +
 +  const mapDispatchToProps = (dispatch) => ({
-+    setChatSessionInfo: (nickname, room) => dispatch(StoreSessionInfo(nickname, room)),
++    setChatSessionInfo: (nickname, room) => dispatch(storeSessionInfo(nickname, room)),
 +  });
 + export const LobbyContainer = connect(
 +  mapStateToProps,

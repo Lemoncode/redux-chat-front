@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { withSessionContext } from '../../common';
 import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
-import { StoreSessionInfo } from '../../actions';
+import { storeSessionInfo } from '../../actions';
 import { LobbyComponent } from './lobby.component';
 
 class LobbyContainerInner extends React.Component {
@@ -76,7 +76,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setChatSessionInfo: (nickname, room) => dispatch(StoreSessionInfo(nickname, room)),
+  setChatSessionInfo: (nickname, room) => dispatch(storeSessionInfo(nickname, room)),
 });
 export const LobbyContainer = connect(
   mapStateToProps,
