@@ -13,12 +13,19 @@ import {establishRoomSocketConnection} from './business';
 function connect(sessionInfo) {
   const socket = establishRoomSocketConnection(sessionInfo.nickname, sessionInfo.room);
 
-  return new Promise(resolve =>
+  return new Promise((resolve, reject) => {  
     socket.on('connect', () => {
       socket.emit('messages');
-      resolve(socket);
-    })  
-  );
+      resolve({socket});
+    });
+
+    socket.on('connect_error', (err) => {
+      console.log('connect failed :-(');
+      reject(new Error('ws:connect_failed '))
+    });    
+  }).catch(
+    error =>({socket, error})
+  )
 }
 
 function subscribe(socket) {
@@ -34,6 +41,7 @@ function subscribe(socket) {
     });
     socket.on('error', (error) => {
       // TODO: handle
+      console.log('Error while trying to connect, TODO: proper handle of this event');
     });
 
     return () => {};
@@ -63,11 +71,17 @@ function* handleIO(socket) {
 
 function* flow() {
   while (true) {
-    let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
-    const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});
-    const task = yield fork(handleIO, socket);
-    const action = yield take(actionIds.DISCONNECT);
-    socket.disconnect();    
+    let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);        
+    const {socket, error} = yield call(connect, {nickname: payload.nickname, room: payload.room});
+
+    if(error) {      
+      // TODO Fire action to notify error on connection
+      console.log('flow: connection failed');    
+    } else {
+      const task = yield fork(handleIO, socket);
+      const action = yield take(actionIds.DISCONNECT);      
+    }
+    socket.disconnect();        
   }
 }
 
