@@ -3,7 +3,7 @@ import { actionIds } from '../common';
 import { canEnrollRoom } from '../api/rooms';
 import { messageFactory } from '../api/chat';
 
-export const StoreSessionInfo = (nickname, room) => ({
+export const storeSessionInfo = (nickname, room) => ({
   type: actionIds.SETUP_SESSION_INFO,
   payload: { nickname, room }
 })
@@ -14,7 +14,7 @@ export const canEnrollRequest = (nickname, room) => (dispatch) => {
       console.log(`*** Join Room Request succeeded
       Nickname: ${nickname}
       Room: ${room}`);
-      dispatch(StoreSessionInfo(nickname, room));
+      dispatch(storeSessionInfo(nickname, room));
       dispatch(push('/chat'));
     } else {
       // We could leverage this to the reducer
@@ -24,7 +24,7 @@ export const canEnrollRequest = (nickname, room) => (dispatch) => {
   // For the sake of the sample no Error handling, we could add it here
 }
 
-export const EnrollRoomRequest = (nickname, room) => ({
+export const enrollRoomRequest = (nickname, room) => ({
   type: actionIds.ENROLL_ROOM_REQUEST,
   payload: { nickname, room }
 });

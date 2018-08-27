@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { messageFactory } from '../../api/chat'
 import { connect } from 'react-redux';
-import { EnrollRoomRequest, sendMessage, disconnectRoomRequest } from '../../actions';
+import { enrollRoomRequest, sendMessage, disconnectRoomRequest } from '../../actions';
 import { ChatComponent } from './chat.component';
 import {
   establishRoomSocketConnection,
@@ -72,7 +72,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  enrollRoom: (nickname, room) => dispatch(EnrollRoomRequest(nickname, room)),
+  enrollRoom: (nickname, room) => dispatch(enrollRoomRequest(nickname, room)),
   sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),
   disconnect: () => dispatch(disconnectRoomRequest()),
 });

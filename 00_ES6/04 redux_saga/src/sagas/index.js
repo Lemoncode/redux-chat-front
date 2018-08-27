@@ -4,7 +4,7 @@ import { eventChannel } from 'redux-saga';
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
 import {actionIds} from '../common';
 import {
-  EnrollRoomRequest, disconnectRoomRequest, onDisconnect,
+  enrollRoomRequest, disconnectRoomRequest, onDisconnect,
   onMessageReceived, onMessageListReceived, sendMessage
 } from '../actions';
 import {establishRoomSocketConnection} from './business';
