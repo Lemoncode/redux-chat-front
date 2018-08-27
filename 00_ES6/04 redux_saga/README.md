@@ -99,8 +99,6 @@ _./src/reducers/chat-log.js_
 import { actionIds } from '../common';
 import { mapApiSingleMessageToStateModel, mapApiMessagesToStateModel } from './chat-log.business';
 
-// TODO: Javi Calzado update to new refactor, do not use string structure
-// use message structure
 const defaultState = () => [];
 
 
@@ -222,20 +220,27 @@ _./src/sagas/index.js_
 // ...
 
 + function connect(sessionInfo) {
-+  const socket = establishRoomSocketConnection(sessionInfo.nickname, sessionInfo.room);
++   const socket = establishRoomSocketConnection(sessionInfo.nickname, sessionInfo.room);
 +
-+  return new Promise(resolve =>
++  return new Promise((resolve, reject) => {  
 +    socket.on('connect', () => {
 +      socket.emit('messages');
-+      resolve(socket);
-+    })  
-+  );
++      resolve({socket});
++    });
++
++    socket.on('connect_error', (err) => {
++      console.log('connect failed :-(');
++      reject(new Error('ws:connect_failed '))
++    });    
++  }).catch(
++    error =>({socket, error})
++  )
 + }
 
 function* flow() {
   while (true) {
     let { payload } = yield take(`${roomEnrollmentRequest}`);
-+    const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});
++    const {socket, error} = yield call(connect, {nickname: payload.nickname, room: payload.room});
   }
 }
 ```
@@ -313,7 +318,7 @@ function* handleIO(socket) {
 }
 ```
 
-- Le'ts add this saga to the flow we are implementing.
+- Le'ts add this saga to the flow we are implementing (plus an error control).
 
 _./src/sagas/index.js_
 
@@ -321,8 +326,13 @@ _./src/sagas/index.js_
 function* flow() {
   while (true) {
     let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
-    const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});    
-+   const task = yield fork(handleIO, socket);
+    const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});
++    if(error) {      
++      // TODO Fire action to notify error on connection
++      console.log('flow: connection failed');    
++    } else {
++      const task = yield fork(handleIO, socket);      
++    }
   }
 }
 ```
@@ -334,11 +344,17 @@ _./src/sagas/index.js_
 ```diff
 function* flow() {
   while (true) {
-    let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
-    const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});
-    const task = yield fork(handleIO, socket);
-+    const action = yield take(actionIds.DISCONNECT);
-+    socket.disconnect();
+    let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);        
+    const {socket, error} = yield call(connect, {nickname: payload.nickname, room: payload.room});
+
+    if(error) {      
+      // TODO Fire action to notify error on connection
+      console.log('flow: connection failed');    
+    } else {
+      const task = yield fork(handleIO, socket);
++      const action = yield take(actionIds.DISCONNECT);      
+    }
++    socket.disconnect();        
   }
 }
 ```
