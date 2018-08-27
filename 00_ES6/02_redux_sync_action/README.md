@@ -11,6 +11,32 @@ in the privder state instead of redux.
 
 - This example takes as starting point example _01 redux-infraestrcuture_, just copy the content from that folder and execute _npm install_.
 
+- Before continue since we are going to make use of the spread operator and we are not using Babel 7 we need to make some config.
+
+First install babel-plugin-transform-object-rest-spread
+
+```bash
+npm install babel-plugin-transform-object-rest-spread --save-dev
+```
+
+Then update the .babelrc config
+
+_./.babelrc_
+
+```diff
+{
+  "presets": [
+    "env",
+    "react"
+  ],
+  "plugins": [
+-    "transform-class-properties"
++    "transform-class-properties",
++    "transform-object-rest-spread"
+  ]
+}
+```
+
 - We are going to setup an action, this actions needs to have an ID, let's create a place to define this action ID's list:
 
 _./src/common/actionIds.js_
@@ -27,7 +53,7 @@ _./src/common/index.js_
 
 ```diff
 export * from './sessionProvider';
-+ export * from './actionIds'
++ export * from './actionIds';
 ```
 
 - Now let's create the action that will be triggered whenever the user can enroll into the channel.
@@ -103,7 +129,7 @@ import { getListOfRooms, canEnrollRoom } from '../../api/rooms';
 import { LobbyComponent } from './lobby.component';
 ```
 
-- Let's create a _LobbyContainer_ that will wrap our _LobbyContainerReact_ 
+- Let's create a _LobbyContainer_ ,at the bottom of the file, that will wrap our _LobbyContainerReact_ 
 
 _./src/pages/lobby/lobby.container.js_
 
@@ -117,7 +143,7 @@ _./src/pages/lobby/lobby.container.js_
 + export const LobbyContainer = connect(
 +  mapStateToProps,
 +  mapDispatchToProps,
-+ )(LobbyContainerRect);
++ )(LobbyContainerReact);
 ```
 
 - Let's remove the _withSessionContext_  wrapper from the _LobbyContainerReact_

@@ -4,6 +4,8 @@ In thi sample we will setup the basic plumbing to get redux up and running in ou
 
 # Steps
 
+- Let first ensure we have Redux Dev Tools installed on the browser.
+
 - This example takes as starting point example _00 start_, just copy the content from that folder and execute _npm install_
 
 - In this sample we will start using _redux-dev-tool- plugin you can download it as a Chrome plugin.
