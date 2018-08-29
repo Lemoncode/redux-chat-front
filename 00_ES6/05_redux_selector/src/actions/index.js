@@ -51,3 +51,8 @@ export const sendMessage = (nickname, room, text) => ({
   type: actionIds.SEND_MESSAGE, 
   payload: messageFactory(nickname, room, text),
 });
+
+export const updateSearchTerm = (searchTerm) => ({
+  type: actionIds.UPDATE_SEARCH_TERM,
+  payload: searchTerm,
+});
