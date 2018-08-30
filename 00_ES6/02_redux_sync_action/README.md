@@ -104,7 +104,7 @@ until we remove it at all, but that's something optional).
 
 - First step let's rename our _LobbyContainer_ to _LobbyContainerReact_ and remove the export
 
-_./src/pages/lobby/lobby.container.js_
+_./src/pages/lobby/lobby.container.jsx_
 
 ```diff
 - export const LobbyContainer = withSessionContext(withRouter(
@@ -116,7 +116,7 @@ _./src/pages/lobby/lobby.container.js_
 - Let's import now _connect_ from _react-redux_ (this will allow us create the redux container and connect it to
 our react component), and let's import the action that we have previously created
 
-_./src/pages/lobby/lobby.container.js_
+_./src/pages/lobby/lobby.container.jsx_
 
 ```diff
 import React from 'react';
@@ -131,7 +131,7 @@ import { LobbyComponent } from './lobby.component';
 
 - Let's create a _LobbyContainer_ ,at the bottom of the file, that will wrap our _LobbyContainerReact_ 
 
-_./src/pages/lobby/lobby.container.js_
+_./src/pages/lobby/lobby.container.jsx_
 
 ```diff
 +  const mapStateToProps = (state) => ({
@@ -148,7 +148,7 @@ _./src/pages/lobby/lobby.container.js_
 
 - Let's remove the _withSessionContext_  wrapper from the _LobbyContainerReact_
 
-_./src/pages/lobby/lobby.container.js_
+_./src/pages/lobby/lobby.container.jsx_
 
 ```diff
 - export const LobbyContainerReact = withSessionContext(withRouter(
@@ -169,7 +169,7 @@ redux instead of the context.
 
 - Let's rename _ChatContainer_ to _ChatContainerReact_, remove the export and the _withSessionContext_.
 
-_./src/pages/chat/chat.container.js_
+_./src/pages/chat/chat.container.jsx_
 
 ```diff
 - export const ChatContainer = withSessionContext(ChatContainerInner);
