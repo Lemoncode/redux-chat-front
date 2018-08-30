@@ -34,7 +34,7 @@ export const store = createStore(reducers,
 canEnroll), later on we will complete it with the navigation.
 
 > About the action creator we are coding: it's a currified function, redux thunk takes care of injecting the dispatcher
-(first we get any param the action itself may recieve, then we get the dispatcher) once the action is where we can
+(first we get any param the action itself may recieve, then we get the dispatcher) once the action is donde we can
 perform this dispatch.
 
 _./src/actions/index.js_
