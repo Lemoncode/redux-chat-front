@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { messageFactory } from '../../api/chat'
 import { connect } from 'react-redux';
-import { enrollRoomRequest, sendMessage, disconnectRoomRequest } from '../../actions';
+import { enrollRoomRequest, sendMessage, disconnectRoomRequest, updateSearchTerm } from '../../actions';
 import { ChatComponent } from './chat.component';
 import {
   establishRoomSocketConnection,
   mapApiSingleMessageToViewmodel,
-  mapApiMessagesToViewmodel
+  mapApiMessagesToViewmodel,
+  filterChatLogBySearchTerm
 } from './chat.container.business'
 
 export class ChatContainerInner extends React.Component {
@@ -38,6 +38,10 @@ export class ChatContainerInner extends React.Component {
     }
   }
 
+  onChangeSearchTerm = (newSearchTerm) => {
+    this.props.updateSearchTerm(newSearchTerm);
+  }
+
   render() {
     const { sessionInfo } = this.props;
     return (
@@ -50,6 +54,8 @@ export class ChatContainerInner extends React.Component {
           onFieldChange={this.onFieldChange}
           onSendMessage={this.onSendMessage}
           chatLog={this.props.chatLog}
+          searchTerm={this.props.searchTerm}
+          onChangeSearchTerm={this.onChangeSearchTerm}
         />
       </React.Fragment>
     );
@@ -68,13 +74,15 @@ ChatContainerInner.propTypes = {
 
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
-  chatLog: state.chatLogReducer,
-})
+  chatLog: filterChatLogBySearchTerm(state.searchReducer.searchTerm, state.chatLogReducer),
+  searchTerm: state.searchReducer.searchTerm,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   enrollRoom: (nickname, room) => dispatch(enrollRoomRequest(nickname, room)),
   sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),
   disconnect: () => dispatch(disconnectRoomRequest()),
+  updateSearchTerm: (searchTerm) => dispatch(updateSearchTerm(searchTerm)),
 });
 
 export const ChatContainer = connect(

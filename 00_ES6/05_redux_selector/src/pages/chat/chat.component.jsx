@@ -8,7 +8,8 @@ import {
   SendMessageActions,
   ChatHeaderComponent,
   ChatLogComponent,
-  ChatAutoscrollComponent
+  ChatAutoscrollComponent,
+  ChatSearch
 } from './components';
 import { CardLayout } from '../../common';
 import styles from './chat.styles';
@@ -34,6 +35,10 @@ class ChatComponentInner extends React.Component {
           <ChatHeaderComponent
             nickname={this.props.sessionInfo.nickname}
             room={this.props.sessionInfo.room}
+          />
+          <ChatSearch
+            searchTerm={this.props.searchTerm}
+            onChangeSearchTerm={this.props.onChangeSearchTerm}
           />
           <CardContent
             component={ChatAutoscrollComponent}
@@ -65,6 +70,8 @@ ChatComponentInner.propTypes = {
   onFieldChange: PropTypes.func.isRequired,
   onSendMessage: PropTypes.func.isRequired,
   chatLog: PropTypes.array.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  onChangeSearchTerm: PropTypes.func.isRequired,
 };
 
 export const ChatComponent = withStyles(styles)(ChatComponentInner)
