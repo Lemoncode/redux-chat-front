@@ -1,18 +1,8 @@
 {
   "rootDir": "../../",
-  "testRegex": "\\.spec\\.(js|ts)x?$",
-  "moduleFileExtensions": [
-    "js",
-    "jsx",
-    "json",
-    "ts",
-    "tsx"
-  ],
+  "testRegex": "\\.spec\\.jsx?$",
   "setupFiles": [
     "<rootDir>/config/test/polyfills.js"
   ],
-  "transform": {
-    ".tsx?": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-  },
   "restoreMocks": true
 }
