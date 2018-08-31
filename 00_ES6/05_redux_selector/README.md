@@ -11,78 +11,77 @@ You can start from the previous sample: 04_redux_saga.
 - Let's create a new component to search in our chat log. You can add the following new files:
 
 _./src/pages/chat/components/chat-search.component.jsx_
-```diff
-+ import React from 'react';
-+ import PropTypes from 'prop-types';
-+ import TextField from '@material-ui/core/TextField';
-+ import IconButton from '@material-ui/core/IconButton';
-+ import SearchIcon from '@material-ui/icons/Search';
-+ import { withStyles } from '@material-ui/core';
-+ import styles from './chat-search.styles';
-+ 
-+ 
-+ const ChatSearchInner = (props) =>
-+   <div className={props.classes.container}>
-+     <SearchIcon className={props.classes.searchIcon}/>
-+     <TextField
-+       className={props.classes.textInput}
-+       InputProps={{
-+         className: props.classes.textInputInner,
-+       }}
-+       id="searchMessage"
-+       placeholder="Enter your search term"
-+       value={props.searchTerm}
-+       onChange={handleChangeSearchTerm(props.onChangeSearchTerm)}
-+       margin="normal"
-+     />
-+   </div>
-+ 
-+ ChatSearchInner.propTypes = {
-+   searchTerm: PropTypes.string.isRequired,
-+   onChangeSearchTerm: PropTypes.func.isRequired,
-+ };
-+ 
-+ const handleChangeSearchTerm = (callback) => (e) => callback(e.target.value);
-+ 
-+ 
-+ export const ChatSearch = withStyles(styles)(ChatSearchInner);
-+ 
+```javascript
+import React from 'react';
+import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
+import { withStyles } from '@material-ui/core';
+import styles from './chat-search.styles';
+ 
+ 
+const ChatSearchInner = (props) =>
+  <div className={props.classes.container}>
+    <SearchIcon className={props.classes.searchIcon}/>
+    <TextField
+      className={props.classes.textInput}
+      InputProps={{
+        className: props.classes.textInputInner,
+      }}
+      id="searchMessage"
+      placeholder="Enter your search term"
+      value={props.searchTerm}
+      onChange={handleChangeSearchTerm(props.onChangeSearchTerm)}
+      margin="normal"
+    />
+  </div>
+ 
+ChatSearchInner.propTypes = {
+  searchTerm: PropTypes.string.isRequired,
+  onChangeSearchTerm: PropTypes.func.isRequired,
+};
+ 
+const handleChangeSearchTerm = (callback) => (e) => callback(e.target.value);
+ 
+ 
+export const ChatSearch = withStyles(styles)(ChatSearchInner); 
 ```
 
 _./src/pages/chat/components/chat-search.styles.js_
-```diff
-+ export default (theme) => ({
-+   container: {
-+     display: 'flex',
-+     flexShrink: 0,
-+     padding: '0 1rem',
-+     borderBottom: `1px solid ${theme.palette.primary.light}4a`,
-+   },
-+   textInput: {
-+     flex: 1,
-+     justifyContent: 'center',
-+     marginTop: 0,
-+     marginBottom: 0,
-+     padding: '0.5rem',
-+     backgroundColor: theme.palette.common.white,
-+     borderRadius: '5px',
-+   },
-+   textInputInner: {
-+     color: theme.palette.secondary.main,
-+     '& > input::placeholder': {
-+       color: theme.palette.grey['400'],
-+       opacity: 1,
-+     },
-+     '&::after, &::before': {
-+       display: 'none',
-+     }
-+   },
-+   searchIcon: {
-+     alignSelf: 'center',
-+     fontSize: '2rem',
-+     color: theme.palette.grey['400'],
-+   },
-+ });
+```javascript
+export default (theme) => ({
+  container: {
+    display: 'flex',
+    flexShrink: 0,
+    padding: '0 1rem',
+    borderBottom: `1px solid ${theme.palette.primary.light}4a`,
+  },
+  textInput: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop: 0,
+    marginBottom: 0,
+    padding: '0.5rem',
+    backgroundColor: theme.palette.common.white,
+    borderRadius: '5px',
+  },
+  textInputInner: {
+    color: theme.palette.secondary.main,
+    '& > input::placeholder': {
+      color: theme.palette.grey['400'],
+      opacity: 1,
+    },
+    '&::after, &::before': {
+      display: 'none',
+    }
+  },
+  searchIcon: {
+    alignSelf: 'center',
+    fontSize: '2rem',
+    color: theme.palette.grey['400'],
+  },
+});
 ```
 
 - Let's expose this new component in our barrel file:
@@ -169,25 +168,24 @@ _./src/actions/index.js_
 Create this new file:
 
 _./src/reducers/search.js_
-```diff
-+ import { actionIds } from '../common';
-+ 
-+ const defaultState = () => ({searchTerm: ''});
-+ 
-+ export const searchReducer = (state = defaultState(), action) => {
-+   switch (action.type) {
-+     case actionIds.UPDATE_SEARCH_TERM:
-+       return handleUpdateSearchTerm(state, action.payload);
-+   }
-+ 
-+   return state;
-+ }
-+ 
-+ export const handleUpdateSearchTerm = (state, searchTerm) => ({
-+   ...state,
-+   searchTerm,
-+ })
+```javascript
+import { actionIds } from '../common';
 
+const defaultState = () => ({searchTerm: ''});
+
+export const searchReducer = (state = defaultState(), action) => {
+  switch (action.type) {
+    case actionIds.UPDATE_SEARCH_TERM:
+      return handleUpdateSearchTerm(state, action.payload);
+  }
+
+  return state;
+}
+
+export const handleUpdateSearchTerm = (state, searchTerm) => ({
+  ...state,
+  searchTerm,
+})
 ```
 
 and combine it with the rest:
@@ -341,35 +339,35 @@ _./src/pages/chat/chat.container.business.js_
 ```
 
 _./src/selectors.business.js_
-```diff
-+ const findInMessage = searchTerm => {
-+   const search = searchTerm.toUpperCase();
-+   return msg => msg && (
-+     msg.text.toUpperCase().includes(search) || 
-+     msg.user.toUpperCase().includes(search));
-+ }
-+ 
-+ export const filterChatLogBySearchTerm = (searchTerm, chatLog) => {
-+   const searchTrimmed = searchTerm && searchTerm.trim();
-+   return chatLog && searchTrimmed ?
-+     chatLog.filter(findInMessage(searchTrimmed)) : chatLog;
-+ };
+```javascript
+const findInMessage = searchTerm => {
+  const search = searchTerm.toUpperCase();
+  return msg => msg && (
+    msg.text.toUpperCase().includes(search) || 
+    msg.user.toUpperCase().includes(search));
+}
+
+export const filterChatLogBySearchTerm = (searchTerm, chatLog) => {
+  const searchTrimmed = searchTerm && searchTerm.trim();
+  return chatLog && searchTrimmed ?
+    chatLog.filter(findInMessage(searchTrimmed)) : chatLog;
+};
 ```
 
 - Let's create our selector with memoization. `createSelector` utility allows to do so by passing a list of input arguments and a transformation function. Note that the input arguments are, in turn, selectors as well.
 
 _./src/selectors.js_
-```diff
-+ import { createSelector } from "reselect";
-+ import { filterChatLogBySearchTerm } from "./selectors.business";
-+ 
-+ const searchTermSelector = state => state.searchReducer.searchTerm;
-+ const chatLogSelector = state => state.chatLogReducer;
-+ 
-+ export const filteredChatLogSelector = createSelector(
-+   [searchTermSelector, chatLogSelector],
-+   filterChatLogBySearchTerm,
-+ );
+```javascript
+import { createSelector } from "reselect";
+import { filterChatLogBySearchTerm } from "./selectors.business";
+
+const searchTermSelector = state => state.searchReducer.searchTerm;
+const chatLogSelector = state => state.chatLogReducer;
+ 
+export const filteredChatLogSelector = createSelector(
+  [searchTermSelector, chatLogSelector],
+  filterChatLogBySearchTerm,
+);
 ```
 
 - Finally, use this new selector in our chat component:
