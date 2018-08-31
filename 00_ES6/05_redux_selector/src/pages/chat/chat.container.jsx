@@ -7,8 +7,8 @@ import {
   establishRoomSocketConnection,
   mapApiSingleMessageToViewmodel,
   mapApiMessagesToViewmodel,
-  filterChatLogBySearchTerm
 } from './chat.container.business'
+import { filteredChatLogSelector } from "../../selectors";
 
 export class ChatContainerInner extends React.Component {
 
@@ -72,9 +72,11 @@ ChatContainerInner.propTypes = {
 
 //const ChatContainerReact = ChatContainerInner;
 
+import { createSelector } from 'reselect';
+
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
-  chatLog: filterChatLogBySearchTerm(state.searchReducer.searchTerm, state.chatLogReducer),
+  chatLog: filteredChatLogSelector(state),
   searchTerm: state.searchReducer.searchTerm,
 });
 

@@ -309,3 +309,89 @@ We have all in place to feed chat component with the 2 missing properties:
     );
 ```
 
+- OK, so far so good. Please, do a quick test and make sure you have a search input box in your chat and it works correctly, cool right? 
+
+- Next step, let's go for the selector. Install `reselect` library like this:
+
+```
+npm install --save reselect
+```
+
+- First of all, let's create a selector file and also move some logic needed by our new selector out of the chat component. The idea behind this is to avoid coupling the component with the shape of our store. Selectors will be our interface instead, and they should be located near the store (which relates to) along with its business logic.
+
+Move chat filter functionality to a new selector business file:
+
+_./src/pages/chat/chat.container.business.js_
+```diff
+    return createSocket(socketParams);        
+}
+
+- const findInMessage = searchTerm => {
+-   const search = searchTerm.toUpperCase();
+-   return msg => msg && (
+-     msg.text.toUpperCase().includes(search) || 
+-     msg.user.toUpperCase().includes(search));
+- }
+- 
+- export const filterChatLogBySearchTerm = (searchTerm, chatLog) => {
+-   const searchTrimmed = searchTerm.trim();
+-   return chatLog && searchTrimmed ?
+-     chatLog.filter(findInMessage(searchTrimmed)) : chatLog;
+- };
+```
+
+_./src/selectors.business.js_
+```diff
++ const findInMessage = searchTerm => {
++   const search = searchTerm.toUpperCase();
++   return msg => msg && (
++     msg.text.toUpperCase().includes(search) || 
++     msg.user.toUpperCase().includes(search));
++ }
++ 
++ export const filterChatLogBySearchTerm = (searchTerm, chatLog) => {
++   const searchTrimmed = searchTerm && searchTerm.trim();
++   return chatLog && searchTrimmed ?
++     chatLog.filter(findInMessage(searchTrimmed)) : chatLog;
++ };
+```
+
+- Let's create our selector with memoization. `createSelector` utility allows to do so by passing a list of input arguments and a transformation function. Note that the input arguments are, in turn, selectors as well.
+
+_./src/selectors.js_
+```diff
++ import { createSelector } from "reselect";
++ import { filterChatLogBySearchTerm } from "./selectors.business";
++ 
++ const searchTermSelector = state => state.searchReducer.searchTerm;
++ const chatLogSelector = state => state.chatLogReducer;
++ 
++ export const filteredChatLogSelector = createSelector(
++   [searchTermSelector, chatLogSelector],
++   filterChatLogBySearchTerm,
++ );
+```
+
+- Finally, use this new selector in our chat component:
+
+_./src/pages/chat/chat.container.jsx_
+
+Import the new selector.
+```diff
+  import {
+    establishRoomSocketConnection,
+    mapApiSingleMessageToViewmodel,
+    mapApiMessagesToViewmodel,
+-   filterChatLogBySearchTerm,
+  } from './chat.container.business'
++ import { filteredChatLogSelector } from "../../selectors";
+```
+
+```diff
+  const mapStateToProps = (state) => ({
+    sessionInfo: state.sessionInfoReducer,
+-   chatLog: filterChatLogBySearchTerm(state.searchReducer.searchTerm, state.chatLogReducer),    
++   chatLog: filteredChatLogSelector(state),
+    searchTerm: state.searchReducer.searchTerm,
+  });
+```
