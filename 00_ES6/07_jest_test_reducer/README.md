@@ -7,19 +7,19 @@ The goal of this sample is to test a reducer using Jest.
 - Let's test `session-info` reducer. Start creating a simple spec file besides it and add a basic test just to make sure it is working:
 
 _./src/reducers/session-info.spec.js_
-```diff
-+ import { sessionInfoReducer } from './session-info';
-+
-+ describe('reducers/session-info tests', () => {
-+   it('should pass ok', () => {
-+     // Arrange
-+ 
-+     // Act
-+ 
-+     // Assert
-+     expect(true).toBeTruthy();
-+   });
-+ });
+```javascript
+import { sessionInfoReducer } from './session-info';
+
+describe('reducers/session-info tests', () => {
+  it('should pass ok', () => {
+    // Arrange
+
+    // Act
+
+    // Assert
+    expect(true).toBeTruthy();
+  });
+});
 ```
 
 Run:
