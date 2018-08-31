@@ -56,7 +56,7 @@ _./src/reducers/session-info.spec.js_
 _./src/reducers/session-info.spec.js_
 ```diff
   import { sessionInfoReducer } from './session-info';
-+ import * as deepFreeze from 'deep-freeze';
++ import deepFreeze from 'deep-freeze';
 
 ...
 
@@ -81,7 +81,38 @@ _./src/reducers/session-info.spec.js_
 +});
 ```
 
+- And of course, it should return updated state without mutate it when the proper action is passed along with its payload:
+
 _./src/reducers/session-info.spec.js_
 ```diff
+  import { sessionInfoReducer } from './session-info';
+  import deepFreeze from 'deep-freeze';
++ import { actionIds } from '../common';
+...
 
+  });
+
++ it(`should return updated state without mutate it when passing state
++     and SETUP_SESSION_INFO action with payload`, () => {
++   // Arrange
++   const state = {
++     nickname: 'initial nickname',
++     room: 'initial room',
++   };
++   const action = {
++     type: actionIds.SETUP_SESSION_INFO,
++     payload: {
++       nickname: 'updated nickname',
++       room: 'updated room',
++     }
++   };
++   deepFreeze(state);
++
++   // Act
++   const nextState = sessionInfoReducer(state, action);
++
++   // Assert
++   expect(nextState.nickname).toEqual('updated nickname');
++   expect(nextState.room).toEqual('updated room');
++ });
 ```
