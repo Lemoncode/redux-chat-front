@@ -9,7 +9,7 @@ export const storeSessionInfo = (nickname, room) => ({
 })
 
 export const canEnrollRequest = (nickname, room) => (dispatch) => {
-  canEnrollRoom(room, nickname).then((succeeded) => {
+  return canEnrollRoom(room, nickname).then((succeeded) => {
     if (succeeded === true) {
       console.log(`*** Join Room Request succeeded
       Nickname: ${nickname}
