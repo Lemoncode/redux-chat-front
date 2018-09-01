@@ -30,7 +30,21 @@ easier to manage our application state.
 
 https://github.com/paularmstrong/normalizr
 
+## Redux Observable
+
+Sagas are quite cool, but if you like RxJS flavour, this library integrated 
+observables with redux.
+
+https://github.com/redux-observable/redux-observable
+
 ## Redux multiple stores
+
+Redux works with a single store, in some  cases you may need multiple stores:
+https://redux.js.org/faq/storesetup#store-setup-multiple-stores
+
+Looking for some sample code about how to work with this?
+
+https://github.com/Lemoncode/redux-multiple-stores
 
 # Thumb Rule
 
