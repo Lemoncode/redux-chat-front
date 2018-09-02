@@ -1,6 +1,6 @@
 # Introduction
 
-Hope you enjoyed this Redux initial dive in, guess what? There's a very intersting ecosystem of third partie open source libraries that can add super powers to our redux 
+Hope you enjoyed this Redux initial dive in, guess what? There's a very interesting ecosystem of third party open source libraries that can add super powers to our redux 
 based applications, in this readme we will enumerate some of them.
 
 Remember... with great power comes great responsability.
@@ -45,6 +45,24 @@ https://redux.js.org/faq/storesetup#store-setup-multiple-stores
 Looking for some sample code about how to work with this?
 
 https://github.com/Lemoncode/redux-multiple-stores
+
+## Redux-forms
+
+It is a great way of managing forms that are powered by Redux. It is a Higher-Order-Component (HOC) that uses react-redux to make sure HTML forms in React use Redux to store all of its state.
+
+https://github.com/erikras/redux-form
+
+## Connected-router-redux
+
+Synchronizes router state with redux store through uni-directional flow
+
+https://github.com/supasate/connected-react-router
+
+## Redux-persist
+
+Persists and rehydrate store from localStorage (or AsyncStorage for React Native)
+
+https://github.com/rt2zz/redux-persist
 
 # Thumb Rule
 
