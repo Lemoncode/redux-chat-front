@@ -1,10 +1,10 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import { reducers } from './reducers';
-import { routerMiddleware, connectRouter } from 'connected-react-router';
-import ReduxThunk from 'redux-thunk';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import ReduxThunk from 'redux-thunk';
 import { history } from './history';
-import {rootSaga} from './sagas';
+import { reducers } from './reducers';
+import { rootSaga } from './sagas';
 
 // Add redux dev tool support
  const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -17,7 +17,7 @@ const SendMessageActionsInner = (props) =>
       id="currentMessage"
       placeholder="Enter your message"
       value={props.currentMessage}
-      onChange={onChangeTextField('currentMessage', props.onFieldChange)}
+      onChange={onTextFieldChange(props.onCurrentMessageChange)}
       onKeyPress={handleInputKeyPress(props.currentMessage, props.onSendMessage)}
       margin="normal"
       autoFocus
@@ -33,8 +33,8 @@ const SendMessageActionsInner = (props) =>
     </Button>
   </React.Fragment>
 
-const onChangeTextField = (fieldId, onFieldChange) => (e) => {
-  onFieldChange(fieldId)(e.target.value);
+const onTextFieldChange = (callback) => (e) => {
+  callback(e.target.value);
 }
 
 const handleInputKeyPress = (message, callback) => (event) => {
@@ -45,8 +45,8 @@ const handleInputKeyPress = (message, callback) => (event) => {
 
 SendMessageActionsInner.propTypes = {
   currentMessage: PropTypes.string.isRequired,
+  onCurrentMessageChange: PropTypes.func.isRequired,
   onSendMessage: PropTypes.func.isRequired,
-  onFieldChange: PropTypes.func.isRequired,
 };
 
 export const SendMessageActions = withStyles(styles)(SendMessageActionsInner);

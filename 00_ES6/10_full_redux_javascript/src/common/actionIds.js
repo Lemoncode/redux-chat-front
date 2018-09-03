@@ -6,5 +6,11 @@ export const actionIds = {
   MESSAGE_RECEIVED: '[5] Chat message received from socket',
   MESSAGE_LIST_RECEIVED: '[6] Chat message list received from socket',
   SEND_MESSAGE:'[7] Send message to the server',
-  UPDATE_SEARCH_TERM:'[8] Update search term in store',
-}
+  UPDATE_CURRENT_MESSAGE:'[8] Update current message in store',
+  UPDATE_SEARCH_TERM:'[9] Update search term in store',
+  UPDATE_ROOM_LIST:'[10] Update list of available rooms from API',
+  UPDATE_ROOM_LIST_SUCCESS:'[11] List of available rooms updated succesfully',
+  UPDATE_ROOM_LIST_FAIL:'[12] List of available rooms update failed',
+  UPDATE_CANDIDATE_ROOM:'[13] Update candidate room in store',
+  UPDATE_CANDIDATE_NICKNAME:'[14] Update candidate nickname in store',
+};

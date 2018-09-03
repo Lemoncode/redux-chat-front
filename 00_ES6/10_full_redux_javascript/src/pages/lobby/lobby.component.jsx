@@ -1,22 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CardLayout } from '../../common';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
+import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
-import { LobbyHeaderComponent, RoomListComponent, LobbyActionsComponent } from './components';
+import Typography from '@material-ui/core/Typography';
+import { CardLayout } from '../../common';
+import {
+  LobbyActionsComponent,
+  LobbyHeaderComponent,
+  RoomListComponent
+} from './components';
 import styles from './lobby.styles';
 
 
 class LobbyComponentInner extends React.Component {
-  componentWillMount() {
-    this.props.fetchRooms();
+  componentDidMount() {
+    this.props.updateRooms();
   }
 
-  onChangeTextField = (fieldId) => (e) => {
-    this.props.onFieldChange(fieldId)(e.target.value);
+  handleNicknameChange = (e) => {
+    this.props.updateNickname(e.target.value);
+  }
+
+  handleSelectedRoomChange = (room) => {
+    this.props.updateSelectedRoom(room);
   }
 
   render() {
@@ -31,7 +39,7 @@ class LobbyComponentInner extends React.Component {
             <RoomListComponent
               rooms={this.props.rooms}
               selectedRoom={this.props.selectedRoom}
-              onFieldChange={this.props.onFieldChange}
+              onSelectedRoomChange={this.handleSelectedRoomChange}
             />
           </CardContent>
           <CardActions className={this.props.classes.cardActions}>
@@ -39,7 +47,7 @@ class LobbyComponentInner extends React.Component {
               nickname={this.props.nickname}
               selectedRoom={this.props.selectedRoom}
               onJoinRoomRequest={this.props.onJoinRoomRequest}
-              onNicknameChange={this.onChangeTextField('nickname')}
+              onNicknameChange={this.handleNicknameChange}
             />
           </CardActions>
         </Card>
@@ -49,11 +57,12 @@ class LobbyComponentInner extends React.Component {
 }
 
 LobbyComponentInner.propTypes = {
-  nickname: PropTypes.string.isRequired,
   rooms: PropTypes.array.isRequired,
+  updateRooms: PropTypes.func.isRequired,
   selectedRoom: PropTypes.string.isRequired,
-  fetchRooms: PropTypes.func.isRequired,
-  onFieldChange : PropTypes.func.isRequired,
+  updateSelectedRoom: PropTypes.func.isRequired,
+  nickname: PropTypes.string.isRequired,
+  updateNickname: PropTypes.func.isRequired,
   onJoinRoomRequest: PropTypes.func.isRequired
 };
 

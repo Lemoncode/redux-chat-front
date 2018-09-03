@@ -1,13 +1,9 @@
-import { messageFactory } from '../api/chat'
-import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
-import { fork, take, call, put, cancel } from 'redux-saga/effects';
-import {actionIds} from '../common';
-import {
-  enrollRoomRequest, disconnectRoomRequest, onDisconnect,
-  onMessageReceived, onMessageListReceived, sendMessage
-} from '../actions';
-import {establishRoomSocketConnection} from './business';
+import { all, call, fork, put, take } from 'redux-saga/effects';
+import { onMessageListReceived, onMessageReceived } from '../actions';
+import { actionIds } from '../common';
+import { establishRoomSocketConnection } from './business';
+import { lobbyRootSaga } from './lobby';
 
 
 function connect(sessionInfo) {
@@ -86,6 +82,9 @@ function* flow() {
 }
 
 export function* rootSaga() {
-  yield fork(flow);
+  yield all([
+    fork(flow),
+    fork(lobbyRootSaga),
+  ]);
 }
 

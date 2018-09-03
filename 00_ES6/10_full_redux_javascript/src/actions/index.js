@@ -52,7 +52,36 @@ export const sendMessage = (nickname, room, text) => ({
   payload: messageFactory(nickname, room, text),
 });
 
+export const updateCurrentMessage = (currentMessage) => ({
+  type: actionIds.UPDATE_CURRENT_MESSAGE,
+  payload: currentMessage,
+});
+
 export const updateSearchTerm = (searchTerm) => ({
   type: actionIds.UPDATE_SEARCH_TERM,
   payload: searchTerm,
+});
+
+export const updateRoomList = () => ({
+  type: actionIds.UPDATE_ROOM_LIST,
+});
+
+export const updateRoomListSuccess = (roomList) => ({
+  type: actionIds.UPDATE_ROOM_LIST_SUCCESS,
+  payload: roomList,
+});
+
+export const updateRoomListFail = (message) => ({
+  type: actionIds.UPDATE_ROOM_LIST_FAIL,
+  payload: message,
+});
+
+export const updateCandidateRoom = (candidateRoom) => ({
+  type: actionIds.UPDATE_CANDIDATE_ROOM,
+  payload: candidateRoom,
+});
+
+export const updateCandidateNickname = (candidateNickname) => ({
+  type: actionIds.UPDATE_CANDIDATE_NICKNAME,
+  payload: candidateNickname,
 });

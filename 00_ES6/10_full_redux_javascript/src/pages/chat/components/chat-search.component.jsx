@@ -18,17 +18,16 @@ const ChatSearchInner = (props) =>
       id="searchMessage"
       placeholder="Enter your search term"
       value={props.searchTerm}
-      onChange={handleChangeSearchTerm(props.onChangeSearchTerm)}
+      onChange={handleChangeSearchTerm(props.onSearchTermChange)}
       margin="normal"
     />
   </div>
 
 ChatSearchInner.propTypes = {
   searchTerm: PropTypes.string.isRequired,
-  onChangeSearchTerm: PropTypes.func.isRequired,
+  onSearchTermChange: PropTypes.func.isRequired,
 };
 
 const handleChangeSearchTerm = (callback) => (e) => callback(e.target.value);
-
 
 export const ChatSearch = withStyles(styles)(ChatSearchInner);
