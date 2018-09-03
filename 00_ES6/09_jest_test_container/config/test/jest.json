@@ -1,0 +1,8 @@
+{
+  "rootDir": "../../",
+  "testRegex": "\\.spec\\.jsx?$",
+  "setupFiles": [
+    "<rootDir>/config/test/polyfills.js"
+  ],
+  "restoreMocks": true
+}
