@@ -33,12 +33,12 @@ const RoomListComponentInner = (props) =>
   </List>
 
 const onListItemClick = (props, room) => (e) =>
-  props.onFieldChange('selectedRoom')(room);
+  props.onSelectedRoomChange(room);
 
 RoomListComponentInner.propTypes = {
   rooms: PropTypes.array.isRequired,
   selectedRoom: PropTypes.string.isRequired,
-  onFieldChange : PropTypes.func.isRequired
+  onSelectedRoomChange : PropTypes.func.isRequired
 };
 
 export const RoomListComponent = withStyles(styles)(RoomListComponentInner);
