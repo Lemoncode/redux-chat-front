@@ -5,41 +5,30 @@ import {
   disconnectRoomRequest,
   enrollRoomRequest,
   sendMessage,
-  updateSearchTerm
+  updateSearchTerm,
+  updateCurrentMessage
 } from '../../actions';
-import { filteredChatLogSelector, searchTermSelector } from "../../selectors";
+import { filteredChatLogSelector, searchTermSelector, currentMessageSelector } from "../../selectors";
 import { ChatComponent } from './chat.component';
 
 export class ChatContainerInner extends React.Component {
-
   constructor(props) {
     super(props);
-
-    this.state = {
-      currentMessage: '',
-    };
   }
 
   enrollRoom = () => {
     this.props.enrollRoom(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
   }
 
-  disconnectfromRoom = () => {
-    this.props.disconnect();
-  }
-
-  onFieldChange = (id) => (value) => {
-    this.setState({ [id]: value })
-  }
-
   onSendMessage = () => {
-    if (this.state.currentMessage) {
-      this.props.sendMessage(this.props.sessionInfo.nickname, this.props.sessionInfo.room, this.state.currentMessage);
+    if (this.props.currentMessage) {
+      this.props.sendMessage(
+        this.props.sessionInfo.nickname,
+        this.props.sessionInfo.room,
+        this.props.currentMessage
+      );
+      this.props.updateCurrentMessage('');
     }
-  }
-
-  onChangeSearchTerm = (newSearchTerm) => {
-    this.props.updateSearchTerm(newSearchTerm);
   }
 
   render() {
@@ -49,13 +38,13 @@ export class ChatContainerInner extends React.Component {
         <ChatComponent
           sessionInfo={sessionInfo}
           enrollRoom={this.enrollRoom}
-          disconnectFromRoom={this.disconnectfromRoom}
-          currentMessage={this.state.currentMessage}
-          onFieldChange={this.onFieldChange}
-          onSendMessage={this.onSendMessage}
+          disconnectFromRoom={this.props.disconnect}
           chatLog={this.props.chatLog}
+          onSendMessage={this.onSendMessage}
+          currentMessage={this.props.currentMessage}
+          onCurrentMessageChange={this.props.updateCurrentMessage}
           searchTerm={this.props.searchTerm}
-          onChangeSearchTerm={this.onChangeSearchTerm}
+          onSearchTermChange={this.props.updateSearchTerm}
         />
       </React.Fragment>
     );
@@ -63,17 +52,21 @@ export class ChatContainerInner extends React.Component {
 }
 
 ChatContainerInner.propTypes = {
-  sessionInfo: PropTypes.object,
-  enrollRoom : PropTypes.func,  
-  chatLog: PropTypes.array,  
-  sendMessage : PropTypes.func,
-  disconnect : PropTypes.func,  
+  sessionInfo: PropTypes.object.isRequired,
+  enrollRoom : PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
+  disconnect: PropTypes.func.isRequired,
+  chatLog: PropTypes.array.isRequired,
+  currentMessage: PropTypes.string.isRequired,
+  updateCurrentMessage: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  updateSearchTerm: PropTypes.func.isRequired,
 };
-
 
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
   chatLog: filteredChatLogSelector(state),
+  currentMessage: currentMessageSelector(state),
   searchTerm: searchTermSelector(state),
 });
 
@@ -81,6 +74,7 @@ const mapDispatchToProps = (dispatch) => ({
   enrollRoom: (nickname, room) => dispatch(enrollRoomRequest(nickname, room)),
   sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),
   disconnect: () => dispatch(disconnectRoomRequest()),
+  updateCurrentMessage: (currentMessage) => dispatch(updateCurrentMessage(currentMessage)),
   updateSearchTerm: (searchTerm) => dispatch(updateSearchTerm(searchTerm)),
 });
 

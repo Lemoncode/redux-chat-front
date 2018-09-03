@@ -3,6 +3,7 @@ import { mapApiSingleMessageToStateModel, mapApiMessagesToStateModel } from './c
 
 const defaultState = () => ({
   chatLog: [],
+  chatCurrentMessage: '',
   searchTerm: '',
 });
 
@@ -12,6 +13,8 @@ export const chatReducer = (state = defaultState(), action) => {
       return handleMessageReceived(state, action.payload);
     case actionIds.MESSAGE_LIST_RECEIVED:
       return handleMessageListReceived(state, action.payload);
+    case actionIds.UPDATE_CURRENT_MESSAGE:
+      return handleUpdateChatCurrentMessage(state, action.payload);      
     case actionIds.UPDATE_SEARCH_TERM:
       return handleUpdateSearchTerm(state, action.payload);
   }
@@ -27,6 +30,11 @@ export const handleMessageReceived = (state, message) => ({
 export const handleMessageListReceived = (state, messageList) => ({
   ...state,
   chatLog: mapApiMessagesToStateModel(messageList),
+});
+
+export const handleUpdateChatCurrentMessage = (state, chatCurrentMessage) => ({
+  ...state,
+  chatCurrentMessage,
 });
 
 export const handleUpdateSearchTerm = (state, searchTerm) => ({

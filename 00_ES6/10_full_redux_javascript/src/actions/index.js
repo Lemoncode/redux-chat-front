@@ -52,6 +52,11 @@ export const sendMessage = (nickname, room, text) => ({
   payload: messageFactory(nickname, room, text),
 });
 
+export const updateCurrentMessage = (currentMessage) => ({
+  type: actionIds.UPDATE_CURRENT_MESSAGE,
+  payload: currentMessage,
+});
+
 export const updateSearchTerm = (searchTerm) => ({
   type: actionIds.UPDATE_SEARCH_TERM,
   payload: searchTerm,
