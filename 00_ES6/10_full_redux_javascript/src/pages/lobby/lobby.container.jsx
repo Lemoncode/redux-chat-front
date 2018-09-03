@@ -1,9 +1,18 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { canEnrollRequest, updateCandidateRoom, updateCandidateNickname, updateRoomList } from '../../actions';
-import { candidateNicknameSelector, candidateRoomSelector, roomsSelector } from '../../selectors';
+import {
+  canEnrollRequest,
+  updateCandidateRoom,
+  updateCandidateNickname,
+  updateRoomList
+} from '../../actions';
+import {
+  candidateNicknameSelector,
+  candidateRoomSelector,
+  roomsSelector
+} from '../../selectors';
 import { LobbyComponent } from './lobby.component';
 
 

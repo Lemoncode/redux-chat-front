@@ -30,5 +30,4 @@ ChatSearchInner.propTypes = {
 
 const handleChangeSearchTerm = (callback) => (e) => callback(e.target.value);
 
-
 export const ChatSearch = withStyles(styles)(ChatSearchInner);

@@ -1,18 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  SendMessageActions,
-  ChatHeaderComponent,
-  ChatLogComponent,
-  ChatAutoscrollComponent,
-  ChatSearch
-} from './components';
 import { CardLayout } from '../../common';
 import styles from './chat.styles';
+import {
+  ChatAutoscrollComponent,
+  ChatHeaderComponent,
+  ChatLogComponent,
+  ChatSearch,
+  SendMessageActions
+} from './components';
 
 
 class ChatComponentInner extends React.Component {

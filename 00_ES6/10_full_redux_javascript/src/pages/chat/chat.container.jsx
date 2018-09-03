@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { enrollRoomRequest, sendMessage, disconnectRoomRequest, updateSearchTerm } from '../../actions';
-import { ChatComponent } from './chat.component';
 import {
-  establishRoomSocketConnection,
-  mapApiSingleMessageToViewmodel,
-  mapApiMessagesToViewmodel,
-} from './chat.container.business'
-import { filteredChatLogSelector } from "../../selectors";
+  disconnectRoomRequest,
+  enrollRoomRequest,
+  sendMessage,
+  updateSearchTerm
+} from '../../actions';
+import { filteredChatLogSelector, searchTermSelector } from "../../selectors";
+import { ChatComponent } from './chat.component';
 
 export class ChatContainerInner extends React.Component {
 
@@ -70,14 +70,11 @@ ChatContainerInner.propTypes = {
   disconnect : PropTypes.func,  
 };
 
-//const ChatContainerReact = ChatContainerInner;
-
-import { createSelector } from 'reselect';
 
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
   chatLog: filteredChatLogSelector(state),
-  searchTerm: state.searchReducer.searchTerm,
+  searchTerm: searchTermSelector(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
