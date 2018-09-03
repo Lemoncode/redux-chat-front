@@ -1,0 +1,12 @@
+{
+  "rootDir": "../../",
+  "testRegex": "\\.spec\\.jsx?$",
+  "setupFiles": [
+    "<rootDir>/config/test/polyfills.js",
+    "<rootDir>/config/test/setupTest.js"
+  ],
+  "restoreMocks": true,
+  "snapshotSerializers": [
+     "enzyme-to-json/serializer"
+  ]
+}

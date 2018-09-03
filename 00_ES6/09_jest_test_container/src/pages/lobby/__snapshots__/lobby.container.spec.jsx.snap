@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pages/lobby/lobby.container.jsx tests should render as expected passing state 1`] = `
+<withRouter(LobbyContainerInner)
+  fireSessionEnrollRequest={[Function]}
+/>
+`;
