@@ -41,6 +41,7 @@ _./src/actions/index.spec.js_
   import { actionIds } from '../common';
   import { storeSessionInfo, canEnrollRequest } from './index';
 + import * as api from '../api/rooms';
++ import * as router from 'connected-react-router';
 
 + const middlewares = [reduxThunk];
 + const getMockStore = configureStore(middlewares);
