@@ -184,7 +184,7 @@ function* flow() {
 }
 ```
 
-- Before connecting the socket let's copy from _./src/pages/chat.container.business.js_ the function named
+- Before connecting the socket let's copy from _./src/pages/chat/chat.container.business.js_ the function named
 _establishRoomSocketConnection_ (rather we could place this in a _api_ or _common_ folder).
 _./src/sagas/business.js_
 
