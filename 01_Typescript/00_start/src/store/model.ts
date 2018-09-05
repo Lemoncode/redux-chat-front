@@ -3,14 +3,21 @@ export interface SessionInfoState {
   room: string;
 }
 
+export type Room = string;
+
 export interface LobbyState {
-  rooms: string[];
-  candidateRoom: string;
+  rooms: Room[];
+  candidateRoom: Room;
   candidateNickname: string;
 }
 
+export interface Message {
+  user: string;
+  text: string;
+}
+
 export interface ChatState {
-  chatLog: string[];
+  chatLog: Message[];
   chatCurrentMessage: string;
   searchTerm: string;
 }

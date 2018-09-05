@@ -1,13 +1,14 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
-import { updateRoomListFail, updateRoomListSuccess } from "../actions";
-import { getListOfRooms } from "../api/rooms";
-import { actionIds } from "../common";
+import { updateRoomListFail, updateRoomListSuccess } from "../actions/actions";
+import { getListOfRooms, ApiModel } from "../api";
+import { actionIds, BaseAction } from "../actions";
+import { mapApiRoomsToRooms } from "./mappers";
 
 function* updateRoomListSaga() {
   try {
-    const rooms = yield call(getListOfRooms);
+    const rooms: ApiModel.Room[] = yield call(getListOfRooms);
     if(Array.isArray(rooms)) {
-      yield put(updateRoomListSuccess(rooms));
+      yield put(updateRoomListSuccess(mapApiRoomsToRooms(rooms)));
     } else {
       throw new Error('Invalid format');
     }
@@ -17,7 +18,7 @@ function* updateRoomListSaga() {
   }
 };
 
-function* updateRoomListFailSaga(action) {
+function* updateRoomListFailSaga(action: BaseAction<string>) {
   try {
     // TODO: We can use a popup instead of console log.
     const message = action.payload;

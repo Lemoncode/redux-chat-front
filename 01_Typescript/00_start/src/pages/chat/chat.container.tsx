@@ -6,17 +6,17 @@ import {
   sendMessage,
   updateSearchTerm,
   updateCurrentMessage
-} from '../../actions';
-import { filteredChatLogSelector, searchTermSelector, currentMessageSelector } from '../../store/selectors';
+} from '../../actions/actions';
+import { filteredChatLogSelector, searchTermSelector, currentMessageSelector, sessionInfoSelector } from '../../store/selectors';
 import { ChatComponent } from './chat.component';
-import { SessionInfo, ChatLog } from './chat.viewmodel';
+import { ViewModel } from '../../common';
 
 interface ChatContainerProps {
-  sessionInfo: SessionInfo,
+  sessionInfo: ViewModel.SessionInfo,
   enrollRoom: (nickname: string, room: string) => void;
   sendMessage: (nickname: string, room: string, message: string) => void;
   disconnect: () => void;
-  chatLog: ChatLog;
+  chatLog: ViewModel.ChatLog;
   currentMessage: string;
   updateCurrentMessage: (currentMessage: string) => void;
   searchTerm: string;
@@ -61,7 +61,7 @@ export class ChatContainerInner extends React.Component<ChatContainerProps> {
 
 // TODO: Typings.
 const mapStateToProps = (state) => ({
-  sessionInfo: state.sessionInfoReducer,
+  sessionInfo: sessionInfoSelector(state),
   chatLog: filteredChatLogSelector(state),
   currentMessage: currentMessageSelector(state),
   searchTerm: searchTermSelector(state),

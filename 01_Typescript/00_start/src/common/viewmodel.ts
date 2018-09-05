@@ -1,7 +1,7 @@
 export interface SessionInfo {
   nickname: string;
   room: string;
-}
+};
 
 export interface ChatMessage {
   user: string;

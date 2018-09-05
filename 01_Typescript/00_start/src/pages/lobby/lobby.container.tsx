@@ -5,7 +5,7 @@ import {
   updateCandidateRoom,
   updateCandidateNickname,
   updateRoomList
-} from '../../actions';
+} from '../../actions/actions';
 import {
   candidateNicknameSelector,
   candidateRoomSelector,

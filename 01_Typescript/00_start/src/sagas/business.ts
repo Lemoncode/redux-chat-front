@@ -1,10 +1,10 @@
-import { createSocket } from '../api/chat'
+import { createSocket, SocketDescriptor } from '../api';
 
-export const establishRoomSocketConnection = (nickname, room) => {
+export const establishRoomSocketConnection = (nickname: string, room: string) => {
   // TODO: move this to env variable
   const baseUrl = 'http://localhost:3000';
 
-  const socketParams = {
+  const socketParams: SocketDescriptor = {
     url: baseUrl,
     channel: room,
     options: {
@@ -13,4 +13,4 @@ export const establishRoomSocketConnection = (nickname, room) => {
   };
 
   return createSocket(socketParams);        
-}
+};

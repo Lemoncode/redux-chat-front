@@ -1,4 +1,4 @@
-import { createSocket } from '../../api/chat'
+import { createSocket } from '../../api';
 
 export const establishRoomSocketConnection = (nickname: string, room: string) => {
     // TODO: move this to env variable

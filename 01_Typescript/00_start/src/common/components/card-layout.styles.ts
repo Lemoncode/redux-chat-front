@@ -1,6 +1,6 @@
-import { createStyles } from "@material-ui/core/styles";
+import { createStyles, Theme } from "@material-ui/core/styles";
 
-export default (theme) => createStyles({
+export default (theme: Theme) => createStyles({
   '@global': {
     'body, html, #root': {
       margin: 0,

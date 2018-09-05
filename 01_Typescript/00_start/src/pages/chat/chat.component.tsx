@@ -12,15 +12,15 @@ import {
   ChatSearch,
   SendMessageActions
 } from './components';
-import { SessionInfo, ChatLog } from './chat.viewmodel';
+import { ViewModel } from '../../common';
 
 
 interface ChatProps extends WithStyles<typeof styles> {
-  sessionInfo: SessionInfo,
+  sessionInfo: ViewModel.SessionInfo,
   enrollRoom: () => void;
   disconnectFromRoom: () => void;
   onSendMessage: () => void;
-  chatLog: ChatLog;
+  chatLog: ViewModel.ChatLog;
   currentMessage: string;
   onCurrentMessageChange: (msg: string) => void;
   searchTerm: string;
