@@ -6,7 +6,7 @@ const srcPath = path.resolve(__dirname, 'src');
 module.exports = {
   context: srcPath,
   resolve: {
-    extensions: ['.js', '.jsx', 'ts', 'tsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     mainFields: ['browser', 'module', 'main'],
   },
   entry: {
