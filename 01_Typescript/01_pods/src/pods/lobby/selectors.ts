@@ -1,5 +1,5 @@
 import { Model } from './store';
-import { podLobbySelector } from '../../root';
+import { podLobbySelector } from '../../selectors';
 import { createSelector } from 'reselect';
 
 

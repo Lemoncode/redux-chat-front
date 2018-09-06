@@ -1,5 +1,5 @@
 import { CoreModel } from './store';
-import { coreSelector } from '../root';
+import { coreSelector } from '../selectors';
 import { createSelector } from 'reselect';
 
 export const sessionInfoSelector = createSelector(
