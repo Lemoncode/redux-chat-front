@@ -15,7 +15,6 @@ module.exports = merge.strategy({ entry: 'prepend' })(common, {
   devServer: {
     contentBase: distPath,
     port: 8080,
-    noInfo: true,
     stats: 'minimal',
     hot: true,
   },
