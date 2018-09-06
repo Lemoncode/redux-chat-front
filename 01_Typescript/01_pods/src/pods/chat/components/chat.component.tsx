@@ -3,7 +3,6 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { CardLayout } from '../../../common-app';
 import * as ViewModel from '../viewmodel';
 import { ChatAutoscrollComponent } from './chat-autoscroll.component';
 import { ChatHeaderComponent } from './chat-header.component';
@@ -36,34 +35,32 @@ class ChatComponentInner extends React.PureComponent<ChatProps> {
 
   public render() {
     return (
-      <CardLayout>
-        <Card className={this.props.classes.card}>
-          <ChatHeaderComponent
+      <Card className={this.props.classes.card}>
+        <ChatHeaderComponent
+          nickname={this.props.sessionInfo.nickname}
+          room={this.props.sessionInfo.room}
+        />
+        <ChatSearch
+          searchTerm={this.props.searchTerm}
+          onSearchTermChange={this.props.onSearchTermChange}
+        />
+        <CardContent
+          component={ChatAutoscrollComponent}
+          className={this.props.classes.cardContent}
+        >
+          <ChatLogComponent 
             nickname={this.props.sessionInfo.nickname}
-            room={this.props.sessionInfo.room}
+            chatLog={this.props.chatLog}
           />
-          <ChatSearch
-            searchTerm={this.props.searchTerm}
-            onSearchTermChange={this.props.onSearchTermChange}
+        </CardContent>
+        <CardActions className={this.props.classes.cardActions}>
+          <SendMessageActions
+            currentMessage={this.props.currentMessage}
+            onCurrentMessageChange={this.props.onCurrentMessageChange}
+            onSendMessage={this.props.onSendMessage}
           />
-          <CardContent
-            component={ChatAutoscrollComponent}
-            className={this.props.classes.cardContent}
-          >
-            <ChatLogComponent 
-              nickname={this.props.sessionInfo.nickname}
-              chatLog={this.props.chatLog}
-            />
-          </CardContent>
-          <CardActions className={this.props.classes.cardActions}>
-            <SendMessageActions
-              currentMessage={this.props.currentMessage}
-              onCurrentMessageChange={this.props.onCurrentMessageChange}
-              onSendMessage={this.props.onSendMessage}
-            />
-          </CardActions>
-        </Card>
-      </CardLayout>
+        </CardActions>
+      </Card>
     )
   }
 }

@@ -12,7 +12,6 @@ import {
   roomsSelector
 } from './selectors';
 import { LobbyComponent } from './components';
-import { Model } from './store';
 
 
 interface LobbyContainerProps {
