@@ -79,6 +79,7 @@ _./src/pages/lobby/lobby.container.spec.jsx_
   import { shallow } from 'enzyme';
 + import configureStore from 'redux-mock-store';
   import { LobbyContainer } from './lobby.container';
++  import * as actionCreators from '../../actions';
 
 + const getMockStore = configureStore();
 
