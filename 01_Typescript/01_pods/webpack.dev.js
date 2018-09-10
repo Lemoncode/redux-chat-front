@@ -7,7 +7,7 @@ const distPath = path.resolve(__dirname, 'dist');
 
 module.exports = merge.strategy({ entry: 'prepend' })(common, {
   mode: 'development',
-  devtool: 'cheap-eval-source-map',
+  devtool: 'source-map',
   output: {
     path: distPath,
     filename: '[name].js',
@@ -15,7 +15,6 @@ module.exports = merge.strategy({ entry: 'prepend' })(common, {
   devServer: {
     contentBase: distPath,
     port: 8080,
-    noInfo: true,
     stats: 'minimal',
     hot: true,
   },
