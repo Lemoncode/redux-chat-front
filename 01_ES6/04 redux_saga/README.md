@@ -15,8 +15,8 @@ npm install redux-saga
 - Let's define actions for:
   - Connecting (EnrollRoom).
   - Disconnect from room.
-  - Handle errors ? 
-  - Handle disconnection ? 
+  - Handle errors ?
+  - Handle disconnection ?
   - Handle read single chat message.
   - Handle read chat message (list of messages).
 We will add ID's for the actions.
@@ -45,25 +45,25 @@ export const enrollRoomRequest = (nickname, room) => ({
 });
 
 export const disconnectRoomRequest = () => ({
-  type: actionIds.DISCONNECT,  
+  type: actionIds.DISCONNECT,
 });
 
 export const onDisconnect = () => ({
-  type: actionIds.ON_DISCONNECT,  
+  type: actionIds.ON_DISCONNECT,
 });
 
 export const onMessageReceived = (message) => ({
-  type: actionIds.MESSAGE_RECEIVED, 
+  type: actionIds.MESSAGE_RECEIVED,
   payload: message,
 });
 
 export const onMessageListReceived = (messageList) => ({
-  type: actionIds.MESSAGE_LIST_RECEIVED, 
+  type: actionIds.MESSAGE_LIST_RECEIVED,
   payload: messageList,
 });
 
 export const sendMessage = (message) => ({
-  type: actionIds.SEND_MESSAGE, 
+  type: actionIds.SEND_MESSAGE,
   payload: message,
 });
 ```
@@ -81,7 +81,7 @@ export const mapApiSingleMessageToStateModel = (message) => ({
   text: message.text,
 });
 
-export const mapApiMessagesToStateModel = (messages) => 
+export const mapApiMessagesToStateModel = (messages) =>
   messages.map((msg) => ({
     user: msg.userId,
     text: msg.text,
@@ -144,22 +144,17 @@ export const reducers = combineReducers({
 
 - Now let's start with the Saga.
 
-- First we need a _root_ saga and a _flow_ saga that will be always waiting for 
+- First we need a _root_ saga and a _flow_ saga that will be always waiting for
 room enrollment and handling messages (input / output), right now let's keep it
 simple (we will go filling _flow_ saga step by step):
 
 _./src/sagas/index.js_
 
 ```javascript
-import { messageFactory } from '../api/chat'
-import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { fork, take, call, put, cancel } from 'redux-saga/effects';
-import {actionIds} from '../common';
-import {
-  enrollRoomRequest, disconnectRoomRequest, onDisconnect, onMessageReceived, 
-  onMessageListReceived, SendMessage
-} from '../actions';
+import { actionIds } from '../common';
+import { onMessageReceived, onMessageListReceived } from '../actions';
 
 function* flow() {
   while (true) {
@@ -178,7 +173,7 @@ _./src/sagas/index.js_
 ```diff
 function* flow() {
   while (true) {
-+   let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);    
++   const { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
   }
 }
 ```
@@ -201,45 +196,45 @@ export const establishRoomSocketConnection = (nickname, room) => {
         query: `user=${nickname}`
       },
     };
-    
-    return createSocket(socketParams);        
+
+    return createSocket(socketParams);
 }
 ```
 
 - Next step we will connect with the socket, we will create a separate
-function that will return a promise, that promise will be handled by the _flow_ saga (wait 
+function that will return a promise, that promise will be handled by the _flow_ saga (wait
 for it), on the connection event we will send a request to the socked to receive all chat log
 from the room that we have connected.
 
 _./src/sagas/index.js_
 
 ```diff
-+ import {establishRoomSocketConnection} from './business';
++ import { establishRoomSocketConnection } from './business';
 
 // ...
 
 + function connect(sessionInfo) {
 +   const socket = establishRoomSocketConnection(sessionInfo.nickname, sessionInfo.room);
 +
-+  return new Promise((resolve, reject) => {  
++  return new Promise((resolve, reject) => {
 +    socket.on('connect', () => {
 +      socket.emit('messages');
-+      resolve({socket});
++      resolve({ socket });
 +    });
 +
 +    socket.on('connect_error', (err) => {
 +      console.log('connect failed :-(');
-+      reject(new Error('ws:connect_failed '))
-+    });    
++      reject(new Error('ws:connect_failed '));
++    });
 +  }).catch(
-+    error =>({socket, error})
++    error =>({ socket, error });
 +  )
 + }
 
 function* flow() {
   while (true) {
-    let { payload } = yield take(`${roomEnrollmentRequest}`);
-+    const {socket, error} = yield call(connect, {nickname: payload.nickname, room: payload.room});
+    const { payload } = yield take(`${roomEnrollmentRequest}`);
++    const { socket, error } = yield call(connect, { nickname: payload.nickname, room: payload.room });
   }
 }
 ```
@@ -277,7 +272,7 @@ function subscribe(socket) {
     -  This saga, will call the initial _subscription_ saga.
     - Setup an infinite loop waiting for actions from the channel
     - Disptaching and action.
-    - This _while(true) loop can be broken from outside (we will see how) 
+    - This _while(true) loop can be broken from outside (we will see how)
 
 _./src/sagas/index.js_
 
@@ -324,13 +319,13 @@ _./src/sagas/index.js_
 ```diff
 function* flow() {
   while (true) {
-    let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
-    const socket = yield call(connect, {nickname: payload.nickname, room: payload.room});
-+    if(error) {      
+    const { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
+    const { socket, error } = yield call(connect, { nickname: payload.nickname, room: payload.room });
++    if(error) {
 +      // TODO Fire action to notify error on connection
-+      console.log('flow: connection failed');    
++      console.log('flow: connection failed');
 +    } else {
-+      const task = yield fork(handleIO, socket);      
++      const ioTask = yield fork(handleIO, socket);
 +    }
   }
 }
@@ -343,17 +338,18 @@ _./src/sagas/index.js_
 ```diff
 function* flow() {
   while (true) {
-    let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);        
-    const {socket, error} = yield call(connect, {nickname: payload.nickname, room: payload.room});
+    const { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
+    const { socket, error } = yield call(connect, { nickname: payload.nickname, room: payload.room });
 
-    if(error) {      
+    if(error) {
       // TODO Fire action to notify error on connection
-      console.log('flow: connection failed');    
+      console.log('flow: connection failed');
     } else {
-      const task = yield fork(handleIO, socket);
-+      const action = yield take(actionIds.DISCONNECT);      
+      const ioTask = yield fork(handleIO, socket);
++      yield take(actionIds.DISCONNECT);
++      yield cancel(ioTask);
     }
-+    socket.disconnect();        
++    socket.disconnect();
   }
 }
 ```
@@ -382,10 +378,10 @@ export const store = createStore(
     applyMiddleware(
       routerMiddleware(history),
       ReduxThunk,
-+     sagaMiddleware,      
++     sagaMiddleware,
     ),
   ),
-); 
+);
 
 + sagaMiddleware.run(rootSaga);
 ```
@@ -453,18 +449,18 @@ _./src/pages/chat/chat.container.jsx_
 
 ```diff
 export class ChatContainerInner extends React.Component {
-  
+
   constructor(props) {
     super(props);
 
     this.state = {
       currentMessage: '',
       chatLog: [],
-    };    
+    };
     this.socket = null;
     this.messageFactory = null;
   }
-  
+
   enrollRoom = () => {
 -    this.socket = establishRoomSocketConnection(this.props.sessionInfo.nickname, this.props.sessionInfo.room);
 -    this.messageFactory = messageFactory(this.props.sessionInfo.room, this.props.sessionInfo.nickname);
@@ -494,7 +490,7 @@ Let's start with the redux container and expose the property down.
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
   enrollRoom : PropTypes.func,
-+  chatLog: PropTypes.array,  
++  chatLog: PropTypes.array,
 };
 
 const ChatContainerReact = ChatContainerInner;
@@ -518,8 +514,8 @@ _./src/pages/chat/chat.container.jsx_
     const { sessionInfo } = this.props;
     return (
       <React.Fragment>
-        <ChatComponent 
-          sessionInfo={sessionInfo} 
+        <ChatComponent
+          sessionInfo={sessionInfo}
           enrollRoom={this.enrollRoom}
           disconnectFromRoom={this.disconnectfromRoom}
           currentMessage={this.state.currentMessage}
@@ -566,8 +562,8 @@ import { canEnrollRoom } from '../api/rooms';
 
 - export const sendMessage = (message) => ({
 + export const sendMessage = (nickname, room, text) => ({
-  type: actionIds.SEND_MESSAGE, 
--   payload: message,  
+  type: actionIds.SEND_MESSAGE,
+-   payload: message,
 +   payload: messageFactory(nickname, room, text),
 });
 ```
@@ -585,25 +581,25 @@ _./src/pages/chat/chat.container.jsx_
 - import { enrollRoomRequest } from '../../actions';
 + import { enrollRoomRequest, sendMessage } from '../../actions';
 
-// ... 
+// ...
 
 ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
   enrollRoom : PropTypes.func,
 +  sendMessage : PropTypes.func,
-  chatLog: PropTypes.array,    
+  chatLog: PropTypes.array,
 };
 
 const ChatContainerReact = ChatContainerInner;
 
 const mapStateToProps = (state) => ({
   sessionInfo: state.sessionInfoReducer,
-  chatLog: state.chatLogReducer,  
+  chatLog: state.chatLogReducer,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   enrollRoomRequest: (nickname, room) => dispatch(enrollRoomRequest(nickname, room)),
-+  sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),   
++  sendMessage: (nickname, room, message) => dispatch(sendMessage(nickname, room, message)),
 });
 ```
 
@@ -612,13 +608,13 @@ And let's replace the component code:
 _./src/pages/chat/chat.container.jsx_
 
 ```diff
-  onSendMessage = () => {   
+  onSendMessage = () => {
 +    if(this.state.currentMessage) {
 +       this.props.sendMessage(this.props.sessionInfo.nickname, this.props.sessionInfo.room, this.state.currentMessage);
 +    }
 -    if(this.state.currentMessage && this.messageFactory) {
 -      const message = this.messageFactory(this.state.currentMessage)
--      this.socket.emit('message', message); 
+-      this.socket.emit('message', message);
 -      this.setState({currentMessage: ''});
 -    }
   }
@@ -652,8 +648,8 @@ ChatContainerInner.propTypes = {
   sessionInfo: PropTypes.object,
   enrollRoom : PropTypes.func,
   sendMessage : PropTypes.func,
-  chatLog: PropTypes.array,  
-+ disconnect : PropTypes.func,  
+  chatLog: PropTypes.array,
++ disconnect : PropTypes.func,
 };
 
 const ChatContainerReact = ChatContainerInner;
@@ -674,13 +670,13 @@ const mapDispatchToProps = (dispatch) => ({
 Let's jump into the component code and replace disconnection with this action:
 
 ```diff
-disconnectfromRoom = () => {  
+disconnectfromRoom = () => {
 -  this.socket.disconnect();
    this.props.disconnect();
 }
 ```
 
-- Now that we have ported all the socket managements to actions/sagas, it's time to perform some cleanup in our 
+- Now that we have ported all the socket managements to actions/sagas, it's time to perform some cleanup in our
 componente code.
 
 ```diff
@@ -762,7 +758,7 @@ There is still from improvement, as an excercise, some tips:
     - Include in the redux cycle the field change (remove the need to store in state current message).
     - Convert this component into stateless.
 
-  
+
 
 
 
