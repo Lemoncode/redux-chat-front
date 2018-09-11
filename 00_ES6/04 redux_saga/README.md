@@ -1,4 +1,4 @@
-# Intro
+npm s# Intro
 
 In this sample we will extract the socket management from the container
 and create a saga to handle this.
