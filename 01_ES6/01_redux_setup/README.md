@@ -1,6 +1,6 @@
 # Example
 
-In thi sample we will setup the basic plumbing to get redux up and running in our project.
+In this sample we will setup the basic plumbing to get redux up and running in our project.
 
 # Steps
 

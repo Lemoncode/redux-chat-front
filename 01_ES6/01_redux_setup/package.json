@@ -1,7 +1,7 @@
 {
-  "name": "sample-es6",
+  "name": "sample-es6_redux-setup",
   "version": "1.0.0",
-  "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
+  "description": "In this sample we will setup the basic plumbing to get redux up and running in our project.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server  --mode development --inline --hot --open\"",
@@ -14,7 +14,6 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "html-webpack-plugin": "^3.2.0",

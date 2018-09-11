@@ -1,7 +1,7 @@
 {
-  "name": "sample-es6",
+  "name": "sample-es6-redux-sync-action",
   "version": "1.0.0",
-  "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
+  "description": "In this sample we will replace the React context that is storing the session, and use the session info reducer.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server  --mode development --inline --hot --open\"",
@@ -14,10 +14,13 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "html-webpack-plugin": "^3.2.0",
     "nodemon": "^1.18.3",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
     "webpack": "^4.16.4",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "3.1.5"
