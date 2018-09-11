@@ -9,18 +9,18 @@ import { lobbyRootSaga } from './lobby';
 function connect(sessionInfo) {
   const socket = establishRoomSocketConnection(sessionInfo.nickname, sessionInfo.room);
 
-  return new Promise((resolve, reject) => {  
+  return new Promise((resolve, reject) => {
     socket.on('connect', () => {
       socket.emit('messages');
-      resolve({socket});
+      resolve({ socket });
     });
 
     socket.on('connect_error', (err) => {
       console.log('connect failed :-(');
       reject(new Error('ws:connect_failed '))
-    });    
+    });
   }).catch(
-    error =>({socket, error})
+    error => ({ socket, error })
   )
 }
 
@@ -40,7 +40,7 @@ function subscribe(socket) {
       console.log('Error while trying to connect, TODO: proper handle of this event');
     });
 
-    return () => {};
+    return () => { };
   });
 }
 
@@ -67,17 +67,18 @@ function* handleIO(socket) {
 
 function* flow() {
   while (true) {
-    let { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);        
-    const {socket, error} = yield call(connect, {nickname: payload.nickname, room: payload.room});
+    const { payload } = yield take(actionIds.ENROLL_ROOM_REQUEST);
+    const { socket, error } = yield call(connect, { nickname: payload.nickname, room: payload.room });
 
-    if(error) {      
+    if (error) {
       // TODO Fire action to notify error on connection
-      console.log('flow: connection failed');    
+      console.log('flow: connection failed');
     } else {
-      const task = yield fork(handleIO, socket);
-      const action = yield take(actionIds.DISCONNECT);      
+      const ioTask = yield fork(handleIO, socket);
+      yield take(actionIds.DISCONNECT);
+      yield cancel(ioTask);
     }
-    socket.disconnect();        
+    socket.disconnect();
   }
 }
 

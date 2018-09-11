@@ -1,5 +1,5 @@
 import { eventChannel } from 'redux-saga';
-import { all, call, fork, put, take } from 'redux-saga/effects';
+import { all, call, fork, put, take, cancel } from 'redux-saga/effects';
 import { actionIds, BaseAction } from '../actions';
 import { onMessageListReceived, onMessageReceived } from '../actions/actions';
 import { ApiModel } from '../api';
@@ -38,7 +38,7 @@ function subscribe(socket) {
       console.log('Error while trying to connect, TODO: proper handle of this event');
     });
 
-    return () => {};
+    return () => { };
   });
 }
 
@@ -71,8 +71,9 @@ function* flow() {
       // TODO Fire action to notify error on connection
       console.log('flow: connection failed');
     } else {
-      const task = yield fork(handleIO, socket);
-      const action = yield take(actionIds.DISCONNECT);
+      const ioTask = yield fork(handleIO, socket);
+      yield take(actionIds.DISCONNECT);
+      yield cancel(ioTask);
     }
     socket.disconnect();
   }
