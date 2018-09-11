@@ -1,7 +1,8 @@
 export default () => ({
   card: {
     width: '75%',
-    minWidth: '30rem',
+    maxWidth: '40rem',
+    minWidth: '20rem',
   },
   cardContent: {
     marginTop: '1rem',
