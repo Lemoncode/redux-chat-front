@@ -1,7 +1,7 @@
 {
-  "name": "sample-es6",
+  "name": "sample-es6-full-redux-javascript",
   "version": "1.0.0",
-  "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
+  "description": "In this sample we will migrate the whole state to redux.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server  --mode development --inline --hot --open\"",

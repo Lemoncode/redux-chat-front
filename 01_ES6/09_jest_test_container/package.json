@@ -1,7 +1,7 @@
 {
-  "name": "sample-es6",
+  "name": "sample-es6-jest-test-container",
   "version": "1.0.0",
-  "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
+  "description": "In this sample we are going to test a container.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --watch webpack.config.js --exec \"webpack-dev-server  --mode development --inline --hot --open\"",

@@ -1,7 +1,6 @@
-npm s# Intro
+# Intro
 
-In this sample we will extract the socket management from the container
-and create a saga to handle this.
+In this sample we will extract the socket management from the container and create a saga to handle this.
 
 A good starting point: https://github.com/kuy/redux-saga-chat-example
 

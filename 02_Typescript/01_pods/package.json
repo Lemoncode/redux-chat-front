@@ -1,7 +1,7 @@
 {
-  "name": "sample-typescript",
+  "name": "sample-typescript-pods",
   "version": "1.0.0",
-  "description": "Implementation done with Typescript",
+  "description": "In this example we will reorganize the project architecture following a pod approach.",
   "main": "index.js",
   "scripts": {
     "start": "npm run start:dev",
