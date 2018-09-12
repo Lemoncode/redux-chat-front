@@ -23,7 +23,7 @@ _./src/reducers/session-info.js_
 ```javascript
 const defaultState = () => ({
   nickname: '',
-  channel: '',
+  room: '',
 });
 
 export const sessionInfoReducer = (state = defaultState(), action) => {
