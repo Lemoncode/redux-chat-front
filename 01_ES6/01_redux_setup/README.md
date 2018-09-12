@@ -13,7 +13,7 @@ In this sample we will setup the basic plumbing to get redux up and running in o
 - We need to install the _Redux_ package plus the official React bindings for Redux.
 
 ```bash
-npm install redux react-redux --save-dev
+npm install redux react-redux --save
 ```
 
 - Let's create our first reducer, it will hold the session informatin: _nickname_ and _channel_ chosen.
@@ -23,7 +23,7 @@ _./src/reducers/session-info.js_
 ```javascript
 const defaultState = () => ({
   nickname: '',
-  channel: '',
+  room: '',
 });
 
 export const sessionInfoReducer = (state = defaultState(), action) => {
@@ -33,7 +33,7 @@ export const sessionInfoReducer = (state = defaultState(), action) => {
 
 - Let's unify all the reducers by using combineReducers (later on more reducers will be created)
 
-> We can nest several calls of combineRedcuers
+> We can nest several calls of combineReducers
 
 _./src/reducers/index.js_
 
@@ -46,7 +46,7 @@ export const reducers = combineReducers({
 });
 ```
 
-- Now that we have the reducers we we need to place them in the application single store, let's setup as well 
+- Now that we have the reducers we need to place them in the application single store, let's setup as well 
 redux-dev-tool support
 
 _./src/store.js_ 
