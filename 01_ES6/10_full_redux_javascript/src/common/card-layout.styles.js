@@ -13,7 +13,6 @@ export default (theme) => ({
     width: '100vw',
     height: '100vh',
     boxSizing: 'border-box',
-    minWidth: '34rem',
     padding: '2rem',
     overflow: 'auto',
     backgroundColor: theme.palette.grey['200'],

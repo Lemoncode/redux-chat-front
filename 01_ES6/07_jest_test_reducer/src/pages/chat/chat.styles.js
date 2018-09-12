@@ -4,6 +4,8 @@ export default (theme) => ({
     flexDirection: 'column',
     width: '100%',
     height: '100%',
+    maxWidth: '40rem',
+    minWidth: '20rem',
   },
   cardActions: {
     padding: '1rem 1.5rem',
