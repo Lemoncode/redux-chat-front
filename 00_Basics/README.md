@@ -60,7 +60,7 @@ const sum = (a, b) => a + b;
 - Let's take a look to this "old school" code:
 
 ```javascript
-const createEmptyClient() => {
+function createEmptyClient() {
   return {
     id: 1,
     name: 'John',
@@ -71,7 +71,10 @@ const createEmptyClient() => {
 console.log(createEmptyClient());
 ```
 
+
 - And how it will work if we just wat to remove the _return_ statement.
+
+> Let's port this step by step
 
 ```javascript
 const createEmptyClient() => ({
