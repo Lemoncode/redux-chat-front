@@ -711,8 +711,8 @@ console.log(sum(3)(2)); // 5
 
 const incrementByTwo = sum(2);
 
-incrementByTwo(3); // 5
-incrementByTwo(6); // 8
+console.log(incrementByTwo(3)); // 5
+console.log(incrementByTwo(6)); // 8
 ```
 
 
