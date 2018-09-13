@@ -371,7 +371,7 @@ const clientA = {
   country: 'United States'  
 }
 
-const displayName(client) {
+const displayName = (client) {
   console.log(client.name);
 }
 
@@ -388,7 +388,7 @@ const clientA = {
   country: 'United States'  
 }
 
-const displayName({name}) {
+const displayName = ({name}) {
   console.log(name);
 }
 
