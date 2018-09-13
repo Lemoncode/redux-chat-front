@@ -55,19 +55,9 @@ displaySomeLines(3,2);
 const sum = (a, b) => a + b;
 ```
 
-- BUT if we are in the previous case but we want to return an object we MUST enclose it in parenthesis (to let )
+- BUT if we are in the previous case but we want to return an object we MUST enclose it in parenthesis(to distinguish between start of functions and returning object).
 
-```javascript
-const createEmptyClient() => ({
-  id: 1,
-  name: 'John',
-  lastname: 'Doe',
-});
-
-console.log(createEmptyClient());
-```
-
-The code above does exactly the same as:
+- Let's take a look to this "old school" code:
 
 ```javascript
 const createEmptyClient() => {
@@ -77,6 +67,18 @@ const createEmptyClient() => {
     lastname: 'Doe',
   }
 }
+```
+
+- And how it will work if we just wat to remove the _return_ statement.
+
+```javascript
+const createEmptyClient() => ({
+  id: 1,
+  name: 'John',
+  lastname: 'Doe',
+});
+
+console.log(createEmptyClient());
 ```
 
 - When we want to create a function that will be consumed by a given event and we want to avoid loosing 'this'
