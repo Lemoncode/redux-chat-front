@@ -448,7 +448,7 @@ Stateless components:
 _old way_
 
 ```javascript
-export const = MyComponent(props) =>
+export const = MyComponent({name, lastname}) =>
   <h1>Hello {props.name} {props.lastname}!</h1>
 }
 ```
@@ -456,8 +456,8 @@ export const = MyComponent(props) =>
 _using destructuring_
 
 ```javascript
-export const = MyComponent(props) =>
-  <h1>Hello {props.name} {props.lastname}!</h1>
+export const = MyComponent({name, lastname}) =>
+  <h1>Hello {name} {lastname}!</h1>
 }
 ```
 
