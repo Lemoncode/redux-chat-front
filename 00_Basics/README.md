@@ -709,7 +709,7 @@ const sum = (a) =>  (b) => a + b;
 console.log(sum(3,2)); // Function, does not invoke a + b
 console.log(sum(3)(2)); // 5
 
-const incrementByTwo(2);
+const incrementByTwo = sum(2);
 
 incrementByTwo(3); // 5
 incrementByTwo(6); // 8
