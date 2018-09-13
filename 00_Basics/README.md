@@ -67,6 +67,8 @@ const createEmptyClient() => {
     lastname: 'Doe',
   }
 }
+
+console.log(createEmptyClient());
 ```
 
 - And how it will work if we just wat to remove the _return_ statement.
