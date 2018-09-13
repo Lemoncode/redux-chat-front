@@ -604,7 +604,7 @@ const defaultClient = {
   country: 'United States'
 }
 
-const createNewClient = (propertyName, country) => ({
+const createNewClient = (propertyName, value) => ({
     ...defaultClient,
     [propertyName]: value
 });
