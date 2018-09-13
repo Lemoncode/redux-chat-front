@@ -363,7 +363,7 @@ How this works
 
 _Using the ES5 way_
 
-```
+```javascript
 const clientA = {
   id: 23,
   name: 'John',
@@ -379,7 +379,7 @@ displayName(clientA);
 
 _Using destructuring_
 
-```
+```javascript
 const clientA = {
   id: 23,
   name: 'John',
