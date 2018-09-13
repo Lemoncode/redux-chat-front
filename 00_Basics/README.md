@@ -501,17 +501,17 @@ const defaultClient = {
   id: 0,
   name: '',
   lastname: '',
-  country: 'United States'
+  country: 'United States',
 }
 
-const createNewClient() {
-  return {
+const createNewClient = () => ({
     id: defaultClient.id,
     name: defaultClient.name,
     lastname: defaultClient.lastname,
     country: defaultClient.country
-  }  
-}
+  });  
+  
+console.log(createNewClient());
 ```
 
 _using spreadoperator_
@@ -524,11 +524,11 @@ const defaultClient = {
   country: 'United States'
 }
 
-const createNewClient() {
-  return {
+const createNewClient = () => ({
     ...defaultClient
-  }  
-}
+});
+
+console.log(createNewClient());
 ```
 
 Let's go one step further, let's say we want to update the field Country:
@@ -543,14 +543,14 @@ const defaultClient = {
   country: 'United States'
 }
 
-const createNewClient(country) {
-  return {
+const createNewClient = (country) => ({
     id: defaultClient.id,
     name: defaultClient.name,
     lastname: defaultClient.lastname,
-    country
-  }  
-}
+    country  
+});
+
+console.log(createNewClient());
 ```
 
 _using spreadoperator_
@@ -569,6 +569,8 @@ const createNewClient(country) {
     country
   }  
 }
+
+console.log(createNewClient());
 ```
 
 Let's go one step further, what if we want to update any pair of key/value (any property, maybe city, name or lastname)
@@ -611,6 +613,9 @@ const createNewClient(country) {
   }  
 }
 ```
+
+> Quite important, remember that spread operator does a shallow copy (no deep copy of nested properties): https://medium.com/@justintulk/javascript-object-cloning-shallow-copies-in-x-d11bd1d9c3f1
+
 ### Real usage
 
 You will see this a lot in reducers:
