@@ -44,6 +44,8 @@ const displaySomeLines = (a, b) => {
 
   return result;
 }
+
+displaySomeLines(3,2);
 ```
 
 - If we just want to return something we don't need to use return.
@@ -60,7 +62,9 @@ const createEmptyClient() => ({
   id: 1,
   name: 'John',
   lastname: 'Doe',
-})
+});
+
+console.log(createEmptyClient());
 ```
 
 The code above does exactly the same as:
