@@ -550,7 +550,7 @@ const createNewClient = (country) => ({
     country  
 });
 
-console.log(createNewClient());
+console.log(createNewClient('France'));
 ```
 
 _using spreadoperator_
@@ -570,7 +570,7 @@ const createNewClient(country) {
   }  
 }
 
-console.log(createNewClient());
+console.log(createNewClient('France'));
 ```
 
 Let's go one step further, what if we want to update any pair of key/value (any property, maybe city, name or lastname)
