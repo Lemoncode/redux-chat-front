@@ -563,12 +563,10 @@ const defaultClient = {
   country: 'United States'
 }
 
-const createNewClient(country) {
-  return {
+const createNewClient = (country) => ({
     ...defaultClient,
     country
-  }  
-}
+});
 
 console.log(createNewClient('France'));
 ```
@@ -585,15 +583,15 @@ const defaultClient = {
   country: 'United States'
 }
 
-const createNewClient(propertyName, value) {
-  return {
+const createNewClient = (propertyName, value) => ({
     id: defaultClient.id,
     name: defaultClient.name,
     lastname: defaultClient.lastname,
     country: defaultClient.country,
     [propertyName]: value
-  }  
-}
+});
+
+console.log(createNewClient('name', 'John');
 ```
 
 _using spreadoperator_
@@ -606,12 +604,12 @@ const defaultClient = {
   country: 'United States'
 }
 
-const createNewClient(country) {
-  return {
+const createNewClient = (propertyName, country) => ({
     ...defaultClient,
     [propertyName]: value
-  }  
-}
+});
+
+console.log(createNewClient('name', 'John');
 ```
 
 > Quite important, remember that spread operator does a shallow copy (no deep copy of nested properties): https://medium.com/@justintulk/javascript-object-cloning-shallow-copies-in-x-d11bd1d9c3f1
