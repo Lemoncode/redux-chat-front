@@ -591,7 +591,7 @@ const createNewClient = (propertyName, value) => ({
     [propertyName]: value
 });
 
-console.log(createNewClient('name', 'John');
+console.log(createNewClient('name', 'John'));
 ```
 
 _using spreadoperator_
@@ -609,7 +609,7 @@ const createNewClient = (propertyName, country) => ({
     [propertyName]: value
 });
 
-console.log(createNewClient('name', 'John');
+console.log(createNewClient('name', 'John'));
 ```
 
 > Quite important, remember that spread operator does a shallow copy (no deep copy of nested properties): https://medium.com/@justintulk/javascript-object-cloning-shallow-copies-in-x-d11bd1d9c3f1
