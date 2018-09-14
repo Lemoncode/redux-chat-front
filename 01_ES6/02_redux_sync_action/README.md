@@ -197,7 +197,7 @@ _./src/pages/chat/chat.container.js_
 +
 +  const mapDispatchToProps = (dispatch) => ({
 +  });
-+ export const LobbyContainer = connect(
++ export const ChatContainer = connect(
 +  mapStateToProps,
 +  mapDispatchToProps,
 + )(ChatContainerReact);
