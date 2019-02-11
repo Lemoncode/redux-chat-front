@@ -54,7 +54,12 @@ Migration of the last ES6 sample to a full typescript solution. Also contains a 
 Recommended reading about several redux ecosystem tools and libraries that may be interesting for the attendees.
 
 
-# About Lemoncode
-We are a team of long-term experienced freelance developers, established as a group in 2010. We specialize in Front End technologies and .NET. Click here to get more info about us.
+# About Basefactor + Lemoncode
+
+We are an innovating team of Javascript experts, passionate about turning your ideas into robust products.
+
+[Basefactor, consultancy by Lemoncode](http://www.basefactor.com) provides consultancy and coaching services.
+
+[Lemoncode](http://lemoncode.net/services/en/#en-home) provides training services.
 
 For the LATAM/Spanish audience we are running an Online Front End Master degree, more info: http://lemoncode.net/master-frontend
