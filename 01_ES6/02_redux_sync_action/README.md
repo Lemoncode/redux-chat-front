@@ -53,6 +53,7 @@ _./src/common/index.js_
 
 ```diff
 export * from './sessionProvider';
+export * from './card-layout.component';
 + export * from './actionIds';
 ```
 
@@ -79,7 +80,7 @@ _./src/reducers/session-info.js_
 
 const defaultState = () => ({
   nickname: '',
-  channel: '',
+  room: '',
 });
 
 export const sessionInfoReducer = (state = defaultState(), action) => {
@@ -176,7 +177,7 @@ _./src/pages/chat/chat.container.jsx_
 + const ChatContainerReact = ChatContainerInner;
 ```
 
-- Let's add the _import_ to reference _connect_ from _reactredux_
+- Let's add the _import_ to reference _connect_ from _react-redux_
 
 ```diff
 import React from 'react';
@@ -240,6 +241,7 @@ _./common/index.js_
 
 ```diff
 - export * from './sessionProvider';
+export * from './card-layout.component';
 export * from './actionIds';
 ```
 
